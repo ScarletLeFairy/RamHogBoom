@@ -3,6 +3,12 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 
+    private static int[] controls;
+    public static int[] Controls
+    {
+        get { return controls; }
+    }
+
     private int controllerNumber;
     public int ControllerNumber
     {
@@ -39,12 +45,12 @@ public class PlayerController : MonoBehaviour {
         //float leftY = GetLeftStickY();
         //float rightX = GetLeftStickX();
         //float rightY = GetLeftStickY();
-        Debug.Log(GetRightBumper());
+        //Debug.Log(GetRightBumper());
 
-        Debug.Log(gameObject.name + " leftX: " + leftX + "|leftY: " + leftY);
+        //Debug.Log(gameObject.name + " leftX: " + leftX + "|leftY: " + leftY);
         //Debug.Log(gameObject.name + " rightX: " + rightX + "|rightX: " + rightY);
 
-        Vector3 movementDirection = new Vector3(leftX, 0, leftY).normalized;
+        //Vector3 movementDirection = new Vector3(leftX, 0, leftY).normalized;
         Vector3 lookDirection = new Vector3(leftX, 0, leftY).normalized;
         //Debug.Log(direction);
 
@@ -89,25 +95,42 @@ public class PlayerController : MonoBehaviour {
 
     private float GetLeftStickX()
     {
-        //return Input.GetAxis("P" + controllerNumber + "LeftStickX");
-        return Input.GetAxis("P1LeftStickX");
+        if (controllerNumber < 1 || controllerNumber > 8)
+        {
+            Debug.Log("Invalid controller number");
+            return 0;
+        }
+        return Input.GetAxis("P" + controllerNumber + "LeftStickX");
     }
 
     private float GetLeftStickY()
     {
-        return Input.GetAxis("P" + controllerNumber + "LeftStickX");
+        if (controllerNumber < 1 || controllerNumber > 8)
+        {
+            Debug.Log("Invalid controller number");
+            return 0;
+        }
+        return Input.GetAxis("P" + controllerNumber + "LeftStickY");
     }
 
     private float GetRightStickX()
     {
-        return Input.GetAxis("P" + controllerNumber + "LeftStickX");
+        if (controllerNumber < 1 || controllerNumber > 8)
+        {
+            Debug.Log("Invalid controller number");
+            return 0;
+        }
+        return Input.GetAxis("P" + controllerNumber + "RightStickX");
     }
 
     private float GetRightStickY()
     {
-        return Input.GetAxis("P" + controllerNumber + "LeftStickX");
+        if (controllerNumber < 1 || controllerNumber > 8)
+        {
+            Debug.Log("Invalid controller number");
+            return 0;
+        }
+        return Input.GetAxis("P" + controllerNumber + "RightStickY");
     }
-
-
 
 }
