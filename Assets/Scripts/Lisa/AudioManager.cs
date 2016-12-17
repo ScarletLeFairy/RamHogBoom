@@ -9,11 +9,13 @@ public class AudioManager : MonoBehaviour {
 	public Slider VolumeSlider;
 	public int Index;
 	public float DefaultVolume;
+	public bool isSFX;
 
 	// Use this for initialization
 	void Start () {
+		Source.loop = !isSFX;
 		ChangeAudioVolume (DefaultVolume);
-		if (!Source.isPlaying) {
+		if (!Source.isPlaying && !isSFX ) {
 			Source.Play ();
 		}
 	}
