@@ -23,9 +23,7 @@ public class PlayerControllerAdv : MonoBehaviour {
 		Player_5,
 		Player_6,
 		Player_7,
-		Player_8,
-		Player_9,
-		Player_10
+		Player_8
 	}
 
 	public Faction faction;
@@ -60,6 +58,25 @@ public class PlayerControllerAdv : MonoBehaviour {
 
 			rigid.MoveRotation (deltaRotation);
 			//rigid.MoveRotation (deltaRotation);
+
+			rigid.AddForce (moveDir, ForceMode.VelocityChange);
+			if (rigid.velocity.magnitude > speed) {
+				rigid.velocity = rigid.velocity.normalized * speed;
+			}
+		}
+
+
+
+		if (charge != null) {
+			rigid.velocity = Vector3.zero;
+			if (charge.time + 0.3 > Time.time) {
+				rigid.AddForce (charge.direction * 12, ForceMode.VelocityChange);
+				//rigid.velocity = charge.direction * 14;
+				rigid.MoveRotation (Quaternion.LookRotation(charge.direction, Vector3.up));
+			} else {
+				charge = null;
+
+			}
 		}
 
 		// ark.transform.rotation * test;
@@ -87,19 +104,7 @@ public class PlayerControllerAdv : MonoBehaviour {
 		}*/
 
 
-		rigid.AddForce (moveDir, ForceMode.VelocityChange);
-		if (rigid.velocity.magnitude > speed) {
-			rigid.velocity = rigid.velocity.normalized * speed;
-		}
 
-		if (charge != null) {
-			if (charge.time + 0.3 > Time.time) {
-				rigid.velocity = charge.direction * 14;
-			} else {
-				charge = null;
-				rigid.velocity = Vector3.zero;
-			}
-		}
 
 		//ARK
 		Vector3 lookDir = Vector3.forward * joyDirR.x + Vector3.right * joyDirR.y;
