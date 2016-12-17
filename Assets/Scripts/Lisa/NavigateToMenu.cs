@@ -7,7 +7,14 @@ public class NavigateToMenu : MonoBehaviour
 
     public void SwitchMenu()
     {
-        MenuToHide.gameObject.SetActive(false);
-        MenuToShow.gameObject.SetActive(true);
+        MenuToHide.SetActive(false);
+        MenuToShow.SetActive(true);
     }
+
+	public void ShowMenu(GameObject menu){
+		menu.SetActive (true);
+	}
+	public void HideMenu(GameObject menu){
+		menu.SetActive (false);
+	}
 }

@@ -11,53 +11,68 @@ public class SelectOnInput : MonoBehaviour
 	public float RepeatDelay;
 	public int index;
 
-    private bool buttonSelected;
+	private bool isActive;
 	private float LastUpdateTime;
 
 	void Start () {
 		UpdateSelection ();
 	}
+
 	// Update is called once per frame
 	void Update () {
-		if (buttonSelected) {
+		if (isActive) {
 			if (CanRefresh ()) {
-				if (Input.GetAxisRaw ("Vertical") < -0.1) {
-					index = index < (MenuObjects.Length - 1) ? ++index : 0;
-					UpdateSelection ();
-				}else if(Input.GetAxisRaw ("Vertical") > 0.1){
-					if (index > 0) {
-						index--;
-					} else {
-						index = MenuObjects.Length - 1;
-					}
-					UpdateSelection ();
-				}
+				HandleVerticalAxisChanges ();
 			}
+			HandleHorizontalAxisChanges ();
+			HandleButtonClicks ();
+		}
+	}
 
-			if (Input.GetAxisRaw("Horizontal") != 0) {
-				float distance = Input.GetAxisRaw ("Horizontal");
-				Slider activeSlider = MenuObjects [index].GetComponent<Slider> ();
-				if (activeSlider != null) {
-					activeSlider.value = activeSlider.value + distance;
-				}
+	//Updates the Selected Item
+	private void HandleVerticalAxisChanges(){
+		if (Input.GetAxisRaw ("Vertical") < -0.1) {
+			index = index < (MenuObjects.Length - 1) ? ++index : 0;
+			UpdateSelection ();
+		}else if(Input.GetAxisRaw ("Vertical") > 0.1){
+			if (index > 0) {
+				index--;
+			} else {
+				index = MenuObjects.Length - 1;
 			}
+			UpdateSelection ();
+		}
+	}
 
-			if (Input.GetKeyDown(KeyCode.JoystickButton0))
-			{
-				Debug.Log("A was pressed");
-				Button activeButton = MenuObjects [index].GetComponent<Button> ();
-				if (activeButton != null) {
-					activeButton.onClick.Invoke();
-					Debug.Log ("Button Click: "+index);
+	//Updates the Slider Values if the Selected Item is one
+	private void HandleHorizontalAxisChanges(){
+		if (Input.GetAxisRaw("Horizontal") != 0) {
+			float distance = Input.GetAxisRaw ("Horizontal");
+			Slider activeSlider = MenuObjects [index].GetComponent<Slider> ();
+			if (activeSlider != null) {
+				if (distance < 0) {
+					activeSlider.value = activeSlider.value - (float)0.01;
+				} else {
+					activeSlider.value = activeSlider.value +  (float)0.01;
 				}
-			}
-
-			if (Input.GetKeyDown(KeyCode.JoystickButton6))
-			{
-				backButtonObject.onClick.Invoke();
 			}
 		}
+	}
 
+	private void HandleButtonClicks(){
+		// Button A
+		if (Input.GetKeyDown(KeyCode.JoystickButton0))
+		{
+			Button activeButton = MenuObjects [index].GetComponent<Button> ();
+			if (activeButton != null) {
+				activeButton.onClick.Invoke();
+			}
+		}
+		// Button Back
+		if (Input.GetKeyDown(KeyCode.JoystickButton6))
+		{
+			backButtonObject.onClick.Invoke();
+		}
 	}
 
 	private void UpdateSelection(){
@@ -70,9 +85,10 @@ public class SelectOnInput : MonoBehaviour
 	}
 
 	private void OnDisable(){
-		buttonSelected = false;
+		isActive = false;
 	}
+
 	private void OnEnable(){
-		buttonSelected = true;
+		isActive = true;
 	}
 }
