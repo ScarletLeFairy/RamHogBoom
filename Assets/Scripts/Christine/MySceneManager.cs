@@ -38,7 +38,7 @@ public class MySceneManager : MonoBehaviour {
         //}
 
         //SceneManager.LoadScene(nextScene, LoadSceneMode.Single); // use single mode 
-        if (getButtonA())
+        if (GetButtonA())
         {
             switch (current.name)
             {
@@ -66,12 +66,12 @@ public class MySceneManager : MonoBehaviour {
 
     }
 
-    private bool getStartButton()
+    private bool GetStartButton()
     {
         return Input.GetKeyDown(KeyCode.JoystickButton7);
     }
 
-    private bool getButtonA()
+    private bool GetButtonA()
     {
         return Input.GetKeyDown(KeyCode.JoystickButton0);
     }
