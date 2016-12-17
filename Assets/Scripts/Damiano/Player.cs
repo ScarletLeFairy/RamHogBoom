@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class Player : MonoBehaviour {
+public class Player : Unit {
 
 
+
+	public bool isAlive = true;
     float speed = 6;
 	public float turnSmoothing = 6f;
 
@@ -31,6 +34,7 @@ public class Player : MonoBehaviour {
 	}
 
 
+
 	// Use this for initialization
 	void Awake() {
 		//rigid = GetComponent<Rigidbody> (); 
@@ -56,25 +60,12 @@ public class Player : MonoBehaviour {
 			Quaternion deltaRotation = Quaternion.Slerp(transform.rotation, targetRotation, Mathf.Pow(turnSmoothing, factor) * Time.deltaTime);
 			//Debug.DrawLine (transform.position + Vector3.up, transform.position + Vector3.up + deltaRotation * Vector3.forward, Color.yellow);
 
-
 			transform.rotation = deltaRotation;
 			//rigid.MoveRotation(deltaRotation);
 		}
-
-
-
 			
 
-		//Quaternion rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSmoothing * Time.deltaTime);
-
-		//rigid.MoveRotation(rotation);
-		//rigid.MovePosition(transform.position + moveDir * speed * Time.deltaTime);
 		Vector3 deltaPosition = moveDir * speed * Time.deltaTime;
-		//if(!Physics.Raycast(transform.position + Vector3.up, deltaPosition + Vector3.up, deltaPosition.magnitude)){
-			//transform.position = transform.position + deltaPosition;
-		//}
-
-		//Debug.DrawLine (transform.position + Vector3.up, transform.position + Vector3.up + deltaPosition*10, Color.green);
 
 		float adjustment = 0;
 		if (rigid is CapsuleCollider) {
@@ -84,12 +75,14 @@ public class Player : MonoBehaviour {
 
 		//Debug.Log (deltaPosition.magnitude);
 		RaycastHit hit;
-		if (Physics.SphereCast(transform.position,adjustment, deltaPosition.normalized, out hit, deltaPosition.magnitude)){
-		//if (Physics.Raycast (transform.position, deltaPosition.normalized, out hit, deltaPosition.magnitude + adjustment)) {
-			Debug.Log ("Found an object - distance: " + hit.distance + " " + hit.collider.gameObject.name);
-		} else {
+		if (!Physics.SphereCast(transform.position,adjustment, deltaPosition.normalized, out hit, deltaPosition.magnitude, Physics.DefaultRaycastLayers , QueryTriggerInteraction.Ignore)){
 			transform.position = transform.position + deltaPosition;
-		}
+			//if (Physics.Raycast (transform.position, deltaPosition.normalized, out hit, deltaPosition.magnitude + adjustment)) {
+			//
+		} 
+		/*else {
+			Debug.Log ("Found an object - distance: " + hit.distance + " " + hit.collider.gameObject.name);	
+		}*/
 
 	}
 
