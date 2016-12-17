@@ -8,8 +8,6 @@ public class MySceneManager : MonoBehaviour {
     public const string LOBBY_SCENE = "Lobby";
     public const string PLAY_SCENE = "Play";
     public const string WIN_SCENE = "Win";
-    public const string RESUME_SCENE = "Resume";
-    public const string SETTINGS_SCENE = "Settings";
 
     private Scene current;
 
