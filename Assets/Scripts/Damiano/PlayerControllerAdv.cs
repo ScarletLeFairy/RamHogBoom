@@ -23,9 +23,7 @@ public class PlayerControllerAdv : MonoBehaviour {
 		Player_5,
 		Player_6,
 		Player_7,
-		Player_8,
-		Player_9,
-		Player_10
+		Player_8
 	}
 
 	public Faction faction;
@@ -35,6 +33,8 @@ public class PlayerControllerAdv : MonoBehaviour {
 	}
 
 	public static List<PlayerControllerAdv> players = new List<PlayerControllerAdv>();
+
+	Charge charge = null;
 
 	// Use this for initialization
 	void Awake() {
@@ -58,6 +58,25 @@ public class PlayerControllerAdv : MonoBehaviour {
 
 			rigid.MoveRotation (deltaRotation);
 			//rigid.MoveRotation (deltaRotation);
+
+			rigid.AddForce (moveDir, ForceMode.VelocityChange);
+			if (rigid.velocity.magnitude > speed) {
+				rigid.velocity = rigid.velocity.normalized * speed;
+			}
+		}
+
+
+
+		if (charge != null) {
+			rigid.velocity = Vector3.zero;
+			if (charge.time + 0.3 > Time.time) {
+				rigid.AddForce (charge.direction * 12, ForceMode.VelocityChange);
+				//rigid.velocity = charge.direction * 14;
+				rigid.MoveRotation (Quaternion.LookRotation(charge.direction, Vector3.up));
+			} else {
+				charge = null;
+
+			}
 		}
 
 		// ark.transform.rotation * test;
@@ -85,14 +104,10 @@ public class PlayerControllerAdv : MonoBehaviour {
 		}*/
 
 
-		rigid.AddForce (moveDir, ForceMode.VelocityChange);
-		if (rigid.velocity.magnitude > speed) {
-			rigid.velocity = rigid.velocity.normalized * speed;
-		}
+
 
 		//ARK
 		Vector3 lookDir = Vector3.forward * joyDirR.x + Vector3.right * joyDirR.y;
-		Debug.Log (lookDir);
 		if (lookDir.magnitude != 0) {
 			ark.gameObject.GetComponent<Renderer>().enabled = true;
 
@@ -124,6 +139,16 @@ public class PlayerControllerAdv : MonoBehaviour {
 	void Update () {
 		joyDirL = new Vector2 (GetLeftStickY(), GetLeftStickX());
 		joyDirR = new Vector2 (GetRightStickY(), GetRightStickX());
+
+		//Debug.DrawLine(transform.position, transform.position + ark.transform.rotation * Vector3.up*20, Color.green);
+
+		if(GetRightBumper()){
+
+			if (charge == null) {
+				charge = new Charge(ark.transform.rotation * Vector3.up, Time.time);
+			}
+			
+		}
 	}
 
 	int GetControllerID(){
@@ -228,4 +253,16 @@ public class PlayerControllerAdv : MonoBehaviour {
 	}
 
 
+}
+
+
+class Charge{
+
+	public Vector3 direction;
+	public float time;
+
+	public Charge(Vector3 direction, float time){
+		this.direction =  direction;
+		this.time = time;
+	}
 }
