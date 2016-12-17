@@ -50,14 +50,22 @@ public class Ball : MonoBehaviour {
 		return Physics.Raycast(transform.position, -Vector3.up, groundlevel*1.1f);
 	}
 
-	void OnCollisionEnter(Collision other) {
+	/*void OnCollisionEnter(Collision other) {
 		foreach (ContactPoint contact in other.contacts) {
 			Debug.DrawRay (contact.point, contact.normal, Color.white);
 		}
 		Debug.Log(other.gameObject.name);
 
+	}*/
+
+
+	void OnTriggerStay(Collider other) {
+		//Debug.Log("HIT");
 	}
 
+	void OnColliderStay(Collider other) {
+		//Debug.Log("HIT");
+	}
 
 	/*void OnCollisionEnter(Collider other){
 
