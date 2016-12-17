@@ -3,11 +3,11 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 
-    private static int[] controls;
-    public static int[] Controls
-    {
-        get { return controls; }
-    }
+    //private static int[] controls;
+    //public static int[] Controls
+    //{
+    //    get { return controls; }
+    //}
 
     private int controllerNumber;
     public int ControllerNumber
