@@ -3,18 +3,14 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-    private int controllerNumber;
-    public int ControllerNumber
-    {
-        get { return controllerNumber; }
-        set { controllerNumber = value; }
-    }
 
     float speed = 6;
 	public float turnSmoothing = 6f;
 
-	Rigidbody rigid;
+	//Rigidbody rigid;
+	Collider rigid;
 
+	public Slot slot;
 	public enum Slot{
 		Player_1,
 		Player_2,
@@ -27,94 +23,126 @@ public class Player : MonoBehaviour {
 		Player_9,
 		Player_10
 	}
-
-	public Slot slot;
-
+		
+	public Faction faction;
 	public enum Faction{
 		HOG,
 		RAM
 	}
-	public Faction faction;
+
 
 	// Use this for initialization
 	void Awake() {
-		rigid = GetComponent<Rigidbody> ();
-
-        controllerNumber = -1;
-        switch(slot)
-        {
-            case Slot.Player_1:
-                controllerNumber = 1;
-                break;
-
-            case Slot.Player_2:
-                controllerNumber = 2;
-                break;
-
-            case Slot.Player_3:
-                controllerNumber = 3;
-                break;
-
-            case Slot.Player_4:
-                controllerNumber = 4;
-                break;
-
-            case Slot.Player_5:
-                controllerNumber = 5;
-                break;
-
-            case Slot.Player_6:
-                controllerNumber = 6;
-                break;
-
-            case Slot.Player_7:
-                controllerNumber = 7;
-                break;
-
-            case Slot.Player_8:
-                controllerNumber = 8;
-                break;
-        }
-       
- 
+		//rigid = GetComponent<Rigidbody> (); 
+		rigid = transform.Find("Mesh").GetComponent<Collider>();
     }
+
+	void OnCollisionEnter (Collision col)
+	{
+		Debug.Log ("Collision:" + col.gameObject.name);
+	}
 
 	Vector2 joyDir = Vector2.zero;
 
 	void FixedUpdate(){
 		Vector3 moveDir = Vector3.forward * joyDir.x + Vector3.right * joyDir.y;
 
+		//ROTATION
 		if (moveDir.magnitude != 0) {
 			Quaternion targetRotation = Quaternion.LookRotation (moveDir, Vector3.up);
-			Debug.DrawLine (transform.position + Vector3.up, transform.position + Vector3.up + targetRotation * Vector3.forward, Color.green);
+			//Debug.DrawLine (transform.position + Vector3.up, transform.position + Vector3.up + targetRotation * Vector3.forward, Color.green);
 
 			float factor = 1 - Quaternion.Angle( transform.rotation, targetRotation )/360f;
-
 			Quaternion deltaRotation = Quaternion.Slerp(transform.rotation, targetRotation, Mathf.Pow(turnSmoothing, factor) * Time.deltaTime);
-			Debug.DrawLine (transform.position + Vector3.up, transform.position + Vector3.up + deltaRotation * Vector3.forward, Color.yellow);
+			//Debug.DrawLine (transform.position + Vector3.up, transform.position + Vector3.up + deltaRotation * Vector3.forward, Color.yellow);
 
 
-
-			rigid.MoveRotation(deltaRotation);
+			transform.rotation = deltaRotation;
+			//rigid.MoveRotation(deltaRotation);
 		}
 
+
+
+			
 
 		//Quaternion rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSmoothing * Time.deltaTime);
 
 		//rigid.MoveRotation(rotation);
-		rigid.MovePosition(transform.position + moveDir * speed * Time.deltaTime);
+		//rigid.MovePosition(transform.position + moveDir * speed * Time.deltaTime);
+		Vector3 deltaPosition = moveDir * speed * Time.deltaTime;
+		//if(!Physics.Raycast(transform.position + Vector3.up, deltaPosition + Vector3.up, deltaPosition.magnitude)){
+			//transform.position = transform.position + deltaPosition;
+		//}
+
+		//Debug.DrawLine (transform.position + Vector3.up, transform.position + Vector3.up + deltaPosition*10, Color.green);
+
+		float adjustment = 0;
+		if (rigid is CapsuleCollider) {
+			CapsuleCollider c = (CapsuleCollider)rigid;
+			adjustment = c.radius;
+		}
+
+		//Debug.Log (deltaPosition.magnitude);
+		RaycastHit hit;
+		if (Physics.SphereCast(transform.position,adjustment, deltaPosition.normalized, out hit, deltaPosition.magnitude)){
+		//if (Physics.Raycast (transform.position, deltaPosition.normalized, out hit, deltaPosition.magnitude + adjustment)) {
+			Debug.Log ("Found an object - distance: " + hit.distance + " " + hit.collider.gameObject.name);
+		} else {
+			transform.position = transform.position + deltaPosition;
+		}
+
 	}
 
 	// Update is called once per frame
 	void Update () {
-        Debug.Log("X: " + GetLeftStickX() + " | Y: " + GetLeftStickY());
+        //Debug.Log("X: " + GetLeftStickX() + " | Y: " + GetLeftStickY());
 		joyDir = new Vector2 (GetLeftStickY(), GetLeftStickX());
 	}
 
-    private bool GetRightBumper()
-    {
-        switch (controllerNumber)
-        {
+	int GetControllerID(){
+
+		int id = -1;
+
+		switch(slot){
+		case Slot.Player_1:
+			id = 1;
+			break;
+
+		case Slot.Player_2:
+			id = 2;
+			break;
+
+		case Slot.Player_3:
+			id = 3;
+			break;
+
+		case Slot.Player_4:
+			id = 4;
+			break;
+
+		case Slot.Player_5:
+			id = 5;
+			break;
+
+		case Slot.Player_6:
+			id = 6;
+			break;
+
+		case Slot.Player_7:
+			id = 7;
+			break;
+
+		case Slot.Player_8:
+			id = 8;
+			break;
+		}
+
+		return id;
+	}
+
+    bool GetRightBumper(){
+        
+		switch (GetControllerID()){
             case 1: return Input.GetKeyDown(KeyCode.Joystick1Button5);
             case 2: return Input.GetKeyDown(KeyCode.Joystick2Button5);
             case 3: return Input.GetKeyDown(KeyCode.Joystick3Button5);
@@ -128,44 +156,48 @@ public class Player : MonoBehaviour {
         }
     }
 
-    private float GetLeftStickX()
+    float GetLeftStickX()
     {
-        if (controllerNumber < 1 || controllerNumber > 8)
+		int id = GetControllerID ();
+        if (id < 1 || id > 8)
         {
             Debug.Log("Invalid controller number");
             return 0;
         }
-        return Input.GetAxis("P" + controllerNumber + "LeftStickX");
+        return Input.GetAxis("P" + id + "LeftStickX");
     }
 
-    private float GetLeftStickY()
+    float GetLeftStickY()
     {
-        if (controllerNumber < 1 || controllerNumber > 8)
+		int id = GetControllerID ();
+        if (id < 1 || id > 8)
         {
             Debug.Log("Invalid controller number");
             return 0;
         }
-        return Input.GetAxis("P" + controllerNumber + "LeftStickY");
+        return Input.GetAxis("P" + id + "LeftStickY");
     }
 
-    private float GetRightStickX()
+    float GetRightStickX()
     {
-        if (controllerNumber < 1 || controllerNumber > 8)
+		int id = GetControllerID ();
+		if (id < 1 || id > 8)
         {
             Debug.Log("Invalid controller number");
             return 0;
         }
-        return Input.GetAxis("P" + controllerNumber + "RightStickX");
+        return Input.GetAxis("P" + id + "RightStickX");
     }
 
-    private float GetRightStickY()
+    float GetRightStickY()
     {
-        if (controllerNumber < 1 || controllerNumber > 8)
+		int id = GetControllerID ();
+        if (id < 1 || id > 8)
         {
             Debug.Log("Invalid controller number");
             return 0;
         }
-        return Input.GetAxis("P" + controllerNumber + "RightStickY");
+        return Input.GetAxis("P" + id + "RightStickY");
     }
 
 }
