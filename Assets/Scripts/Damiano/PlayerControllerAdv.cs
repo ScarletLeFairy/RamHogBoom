@@ -7,6 +7,7 @@ public class PlayerControllerAdv : MonoBehaviour {
 	public bool isAlive = true;
 
 	public float speed = 6;
+	//public float maxspeed = 5;
 	public float turn = 6f;
 
 	Rigidbody rigid;
@@ -52,20 +53,17 @@ public class PlayerControllerAdv : MonoBehaviour {
 		//ROTATION
 		if (moveDir.magnitude != 0) {
 			Quaternion targetRotation = Quaternion.LookRotation (moveDir, Vector3.up);
-			//Debug.DrawLine (transform.position + Vector3.up, transform.position + Vector3.up + targetRotation * Vector3.forward, Color.green);
-
 			float factor = 1 - Quaternion.Angle( transform.rotation, targetRotation )/360f;
 			Quaternion deltaRotation = Quaternion.Slerp(transform.rotation, targetRotation, Mathf.Pow(turn, factor) * Time.deltaTime);
-			//Debug.DrawLine (transform.position + Vector3.up, transform.position + Vector3.up + deltaRotation * Vector3.forward, Color.yellow);
 
 			rigid.MoveRotation (deltaRotation);
-			//transform.rotation = deltaRotation;
+			//rigid.MoveRotation (deltaRotation);
 		}
 
 		// ark.transform.rotation * test;
 
 
-		Vector3 deltaPosition = moveDir * speed * Time.deltaTime;
+		//Vector3 deltaPosition = moveDir * speed * Time.deltaTime;
 
 		float adjustment = 0;
 		/*if (rigid is CapsuleCollider) {
@@ -74,27 +72,41 @@ public class PlayerControllerAdv : MonoBehaviour {
 		}*/
 
 		//Debug.Log (deltaPosition.magnitude);
-		RaycastHit hit;
-		if (!Physics.SphereCast(transform.position,adjustment, deltaPosition.normalized, out hit, deltaPosition.magnitude, Physics.DefaultRaycastLayers , QueryTriggerInteraction.Ignore)){
+		//RaycastHit hit;
+		//if (!Physics.SphereCast(transform.position,adjustment, deltaPosition.normalized, out hit, deltaPosition.magnitude, Physics.DefaultRaycastLayers , QueryTriggerInteraction.Ignore)){
 			//transform.position = transform.position + deltaPosition;
-			rigid.MovePosition (transform.position + deltaPosition);
+			//rigid.MovePosition (transform.position + deltaPosition);
+			//rigid.AddForce(deltaPosition*100, ForceMode.Impulse);
 			//if (Physics.Raycast (transform.position, deltaPosition.normalized, out hit, deltaPosition.magnitude + adjustment)) {
 			//
-		} 
+		//} 
 		/*else {
 			Debug.Log ("Found an object - distance: " + hit.distance + " " + hit.collider.gameObject.name);	
 		}*/
 
 
+		rigid.AddForce (moveDir, ForceMode.VelocityChange);
+		if (rigid.velocity.magnitude > speed) {
+			rigid.velocity = rigid.velocity.normalized * speed;
+		}
+
 		//ARK
 		Vector3 lookDir = Vector3.forward * joyDirR.x + Vector3.right * joyDirR.y;
 		Debug.Log (lookDir);
 		if (lookDir.magnitude != 0) {
-			Quaternion deltaArk = /*Quaternion.LookRotation (Vector3.up, Vector3.forward) * */Quaternion.LookRotation (lookDir, Vector3.up);
+			ark.gameObject.GetComponent<Renderer>().enabled = true;
+
+			Quaternion targetRotation = Quaternion.LookRotation (lookDir, Vector3.up) * Quaternion.LookRotation (Vector3.up, Vector3.forward);
+			float factor = 1 - Quaternion.Angle( ark.transform.rotation, targetRotation )/360f;
+			Quaternion deltaArk = Quaternion.Slerp(ark.transform.rotation, targetRotation, Mathf.Pow(turn*2, factor) * Time.deltaTime);
+
+			//Quaternion deltaArk = Quaternion.LookRotation (lookDir, Vector3.up) * Quaternion.LookRotation (Vector3.up, Vector3.forward);
 			ark.transform.rotation = deltaArk;
 			ark.transform.position = transform.position + deltaArk * new Vector3 (0, 1f, 0.25f);
 		} else {
-			Quaternion deltaArk = Quaternion.LookRotation (Vector3.up, Vector3.forward);
+			ark.gameObject.GetComponent<Renderer>().enabled = false;
+
+			Quaternion deltaArk = Quaternion.LookRotation (transform.forward, Vector3.up) * Quaternion.LookRotation (Vector3.up, Vector3.forward);
 			ark.transform.rotation = deltaArk;
 			ark.transform.position = transform.position + deltaArk * new Vector3 (0, 1f, 0.25f);
 		}
