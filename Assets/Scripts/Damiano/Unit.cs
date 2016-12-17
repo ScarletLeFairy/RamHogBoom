@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Unit : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
+	public static List<Unit> units = new List<Unit>();
+
+	void OnEnable(){
+		units.Add (this);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	void OnDisable(){
+		units.Remove(this);
 	}
 }
