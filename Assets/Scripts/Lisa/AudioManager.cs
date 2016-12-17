@@ -20,6 +20,11 @@ public class AudioManager : MonoBehaviour {
 		}
 	}
 
+	public void PlaySFX(int index){
+		ChangeMusicTrack (index);
+		Source.Play ();
+	}
+
 	public void ChangeAudioVolume(){
 		Source.volume = VolumeSlider.value;
 	}
