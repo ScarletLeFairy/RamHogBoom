@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Player : Unit {
+public class Player : MonoBehaviour {
 
 
 
@@ -32,6 +32,8 @@ public class Player : Unit {
 		HOG,
 		RAM
 	}
+
+	public static List<PlayerControllerAdv> players = new List<PlayerControllerAdv>();
 
 
 
@@ -91,6 +93,7 @@ public class Player : Unit {
         //Debug.Log("X: " + GetLeftStickX() + " | Y: " + GetLeftStickY());
 		joyDir = new Vector2 (GetLeftStickY(), GetLeftStickX());
 	}
+		
 
 	int GetControllerID(){
 
@@ -192,5 +195,6 @@ public class Player : Unit {
         }
         return Input.GetAxis("P" + id + "RightStickY");
     }
+
 
 }

@@ -1,0 +1,219 @@
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class PlayerControllerAdv : MonoBehaviour {
+
+	public bool isAlive = true;
+
+	public float speed = 6;
+	public float turn = 6f;
+
+	Rigidbody rigid;
+	GameObject ark;
+	//Collider rigid;
+
+	public Slot slot;
+	public enum Slot{
+		Player_1,
+		Player_2,
+		Player_3,
+		Player_4,
+		Player_5,
+		Player_6,
+		Player_7,
+		Player_8,
+		Player_9,
+		Player_10
+	}
+
+	public Faction faction;
+	public enum Faction{
+		HOG,
+		RAM
+	}
+
+	public static List<PlayerControllerAdv> players = new List<PlayerControllerAdv>();
+
+	// Use this for initialization
+	void Awake() {
+		//rigid = GetComponent<Rigidbody> (); 
+		rigid = GetComponent<Rigidbody>();
+		ark = transform.Find("Ark").gameObject;
+	}
+
+
+	Vector2 joyDirL = Vector2.zero;
+	Vector2 joyDirR = Vector2.zero;
+
+	void FixedUpdate(){
+		Vector3 moveDir = Vector3.forward * joyDirL.x + Vector3.right * joyDirL.y;
+
+		//ROTATION
+		if (moveDir.magnitude != 0) {
+			Quaternion targetRotation = Quaternion.LookRotation (moveDir, Vector3.up);
+			//Debug.DrawLine (transform.position + Vector3.up, transform.position + Vector3.up + targetRotation * Vector3.forward, Color.green);
+
+			float factor = 1 - Quaternion.Angle( transform.rotation, targetRotation )/360f;
+			Quaternion deltaRotation = Quaternion.Slerp(transform.rotation, targetRotation, Mathf.Pow(turn, factor) * Time.deltaTime);
+			//Debug.DrawLine (transform.position + Vector3.up, transform.position + Vector3.up + deltaRotation * Vector3.forward, Color.yellow);
+
+			rigid.MoveRotation (deltaRotation);
+			//transform.rotation = deltaRotation;
+		}
+
+		// ark.transform.rotation * test;
+
+
+		Vector3 deltaPosition = moveDir * speed * Time.deltaTime;
+
+		float adjustment = 0;
+		/*if (rigid is CapsuleCollider) {
+			CapsuleCollider c = (CapsuleCollider)rigid;
+			adjustment = c.radius;
+		}*/
+
+		//Debug.Log (deltaPosition.magnitude);
+		RaycastHit hit;
+		if (!Physics.SphereCast(transform.position,adjustment, deltaPosition.normalized, out hit, deltaPosition.magnitude, Physics.DefaultRaycastLayers , QueryTriggerInteraction.Ignore)){
+			//transform.position = transform.position + deltaPosition;
+			rigid.MovePosition (transform.position + deltaPosition);
+			//if (Physics.Raycast (transform.position, deltaPosition.normalized, out hit, deltaPosition.magnitude + adjustment)) {
+			//
+		} 
+		/*else {
+			Debug.Log ("Found an object - distance: " + hit.distance + " " + hit.collider.gameObject.name);	
+		}*/
+
+
+		//ARK
+		Vector3 lookDir = Vector3.forward * joyDirR.x + Vector3.right * joyDirR.y;
+		Debug.Log (lookDir);
+		if (lookDir.magnitude != 0) {
+			Quaternion deltaArk = /*Quaternion.LookRotation (Vector3.up, Vector3.forward) * */Quaternion.LookRotation (lookDir, Vector3.up);
+			ark.transform.rotation = deltaArk;
+			ark.transform.position = transform.position + deltaArk * new Vector3 (0, 1f, 0.25f);
+		} else {
+			Quaternion deltaArk = Quaternion.LookRotation (Vector3.up, Vector3.forward);
+			ark.transform.rotation = deltaArk;
+			ark.transform.position = transform.position + deltaArk * new Vector3 (0, 1f, 0.25f);
+		}
+	}
+
+	void OnEnable(){
+		players.Add (this);
+	}
+
+	void OnDisable(){
+		players.Remove (this);
+	}
+
+	// Update is called once per frame
+	void Update () {
+		joyDirL = new Vector2 (GetLeftStickY(), GetLeftStickX());
+		joyDirR = new Vector2 (GetRightStickY(), GetRightStickX());
+	}
+
+	int GetControllerID(){
+
+		int id = -1;
+
+		switch(slot){
+		case Slot.Player_1:
+			id = 1;
+			break;
+
+		case Slot.Player_2:
+			id = 2;
+			break;
+
+		case Slot.Player_3:
+			id = 3;
+			break;
+
+		case Slot.Player_4:
+			id = 4;
+			break;
+
+		case Slot.Player_5:
+			id = 5;
+			break;
+
+		case Slot.Player_6:
+			id = 6;
+			break;
+
+		case Slot.Player_7:
+			id = 7;
+			break;
+
+		case Slot.Player_8:
+			id = 8;
+			break;
+		}
+
+		return id;
+	}
+
+	bool GetRightBumper(){
+
+		switch (GetControllerID()){
+		case 1: return Input.GetKeyDown(KeyCode.Joystick1Button5);
+		case 2: return Input.GetKeyDown(KeyCode.Joystick2Button5);
+		case 3: return Input.GetKeyDown(KeyCode.Joystick3Button5);
+		case 4: return Input.GetKeyDown(KeyCode.Joystick4Button5);
+		case 5: return Input.GetKeyDown(KeyCode.Joystick5Button5);
+		case 6: return Input.GetKeyDown(KeyCode.Joystick6Button5);
+		case 7: return Input.GetKeyDown(KeyCode.Joystick7Button5);
+		case 8: return Input.GetKeyDown(KeyCode.Joystick8Button5);
+			// Unity does not support buttons for more than 8 joysticks
+		default: return false;
+		}
+	}
+
+	float GetLeftStickX()
+	{
+		int id = GetControllerID ();
+		if (id < 1 || id > 8)
+		{
+			Debug.Log("Invalid controller number");
+			return 0;
+		}
+		return Input.GetAxis("P" + id + "LeftStickX");
+	}
+
+	float GetLeftStickY()
+	{
+		int id = GetControllerID ();
+		if (id < 1 || id > 8)
+		{
+			Debug.Log("Invalid controller number");
+			return 0;
+		}
+		return Input.GetAxis("P" + id + "LeftStickY");
+	}
+
+	float GetRightStickX()
+	{
+		int id = GetControllerID ();
+		if (id < 1 || id > 8)
+		{
+			Debug.Log("Invalid controller number");
+			return 0;
+		}
+		return Input.GetAxis("P" + id + "RightStickX");
+	}
+
+	float GetRightStickY()
+	{
+		int id = GetControllerID ();
+		if (id < 1 || id > 8)
+		{
+			Debug.Log("Invalid controller number");
+			return 0;
+		}
+		return Input.GetAxis("P" + id + "RightStickY");
+	}
+
+
+}
