@@ -3,7 +3,14 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-	float speed = 6;
+    private int controllerNumber;
+    public int ControllerNumber
+    {
+        get { return controllerNumber; }
+        set { controllerNumber = value; }
+    }
+
+    float speed = 6;
 	public float turnSmoothing = 6f;
 
 	Rigidbody rigid;
@@ -32,7 +39,45 @@ public class Player : MonoBehaviour {
 	// Use this for initialization
 	void Awake() {
 		rigid = GetComponent<Rigidbody> ();
-	}
+
+        controllerNumber = -1;
+        switch(slot)
+        {
+            case Slot.Player_1:
+                controllerNumber = 1;
+                break;
+
+            case Slot.Player_2:
+                controllerNumber = 2;
+                break;
+
+            case Slot.Player_3:
+                controllerNumber = 3;
+                break;
+
+            case Slot.Player_4:
+                controllerNumber = 4;
+                break;
+
+            case Slot.Player_5:
+                controllerNumber = 5;
+                break;
+
+            case Slot.Player_6:
+                controllerNumber = 6;
+                break;
+
+            case Slot.Player_7:
+                controllerNumber = 7;
+                break;
+
+            case Slot.Player_8:
+                controllerNumber = 8;
+                break;
+        }
+       
+ 
+    }
 
 	Vector2 joyDir = Vector2.zero;
 
@@ -62,6 +107,65 @@ public class Player : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		joyDir = new Vector2 (Input.GetAxis("Vertical"), Input.GetAxis("Horizontal"));
+        Debug.Log("X: " + GetLeftStickX() + " | Y: " + GetLeftStickY());
+		joyDir = new Vector2 (GetLeftStickY(), GetLeftStickX());
 	}
+
+    private bool GetRightBumper()
+    {
+        switch (controllerNumber)
+        {
+            case 1: return Input.GetKeyDown(KeyCode.Joystick1Button5);
+            case 2: return Input.GetKeyDown(KeyCode.Joystick2Button5);
+            case 3: return Input.GetKeyDown(KeyCode.Joystick3Button5);
+            case 4: return Input.GetKeyDown(KeyCode.Joystick4Button5);
+            case 5: return Input.GetKeyDown(KeyCode.Joystick5Button5);
+            case 6: return Input.GetKeyDown(KeyCode.Joystick6Button5);
+            case 7: return Input.GetKeyDown(KeyCode.Joystick7Button5);
+            case 8: return Input.GetKeyDown(KeyCode.Joystick8Button5);
+            // Unity does not support buttons for more than 8 joysticks
+            default: return false;
+        }
+    }
+
+    private float GetLeftStickX()
+    {
+        if (controllerNumber < 1 || controllerNumber > 8)
+        {
+            Debug.Log("Invalid controller number");
+            return 0;
+        }
+        return Input.GetAxis("P" + controllerNumber + "LeftStickX");
+    }
+
+    private float GetLeftStickY()
+    {
+        if (controllerNumber < 1 || controllerNumber > 8)
+        {
+            Debug.Log("Invalid controller number");
+            return 0;
+        }
+        return Input.GetAxis("P" + controllerNumber + "LeftStickY");
+    }
+
+    private float GetRightStickX()
+    {
+        if (controllerNumber < 1 || controllerNumber > 8)
+        {
+            Debug.Log("Invalid controller number");
+            return 0;
+        }
+        return Input.GetAxis("P" + controllerNumber + "RightStickX");
+    }
+
+    private float GetRightStickY()
+    {
+        if (controllerNumber < 1 || controllerNumber > 8)
+        {
+            Debug.Log("Invalid controller number");
+            return 0;
+        }
+        return Input.GetAxis("P" + controllerNumber + "RightStickY");
+    }
+
 }
