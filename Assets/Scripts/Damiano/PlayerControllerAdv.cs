@@ -17,8 +17,17 @@ public class PlayerControllerAdv : MonoBehaviour {
 
 	GameObject ark;
 
+    GameObject ball;
 
-	public Slot slot;
+    private bool isDead;
+    public bool IsDead
+    {
+        get { return isDead; }
+        set { isDead = value; }
+    }
+
+
+    public Slot slot;
 	public enum Slot{
 		Player_1,
 		Player_2,
@@ -46,6 +55,8 @@ public class PlayerControllerAdv : MonoBehaviour {
 		border = GetComponent<Collider> (); 
 
 		ark = transform.Find("Ark").gameObject;
+
+        isDead = false;
 	}
 
 
@@ -105,7 +116,7 @@ public class PlayerControllerAdv : MonoBehaviour {
 
 		RaycastHit hit;
 		if (Physics.SphereCast(transform.position + Vector3.up, adjustment, rigid.velocity.normalized, out hit, rigid.velocity.magnitude, Physics.DefaultRaycastLayers , QueryTriggerInteraction.Ignore)){
-			Debug.Log ("Found an object - distance: " + hit.distance + " " + hit.collider.gameObject.name);	
+//			Debug.Log ("Found an object - distance: " + hit.distance + " " + hit.collider.gameObject.name);	
 			//rigid.AddForce (-rigid.velocity, ForceMode.VelocityChange);
 			rigid.velocity = Vector3.zero;
 			//transform.position = transform.position + rigid.velocity;
@@ -184,18 +195,42 @@ public class PlayerControllerAdv : MonoBehaviour {
 		joyDirL = new Vector2 (GetLeftStickY(), GetLeftStickX());
 		joyDirR = new Vector2 (GetRightStickY(), GetRightStickX());
 
-		//Debug.DrawLine(transform.position, transform.position + ark.transform.rotation * Vector3.up*20, Color.green);
+        //Debug.DrawLine(transform.position, transform.position + ark.transform.rotation * Vector3.up*20, Color.green);
 
-		if(GetRightBumper()){
+        if (ball != null)
+        {
+            ball.transform.position = new Vector3(transform.position.x, transform.position.y + 2.2f, transform.position.z);
+        }
 
-			if (charge == null) {
-				charge = new Dash(ark.transform.rotation * Vector3.up, Time.time);
-			}
-			
+        if (GetRightBumper()){
+            if (ball != null)
+            {
+                // TODO throw ball
+                ThrowBall();
+                Debug.Log("Hello World!");
+            } else
+            {
+                if (charge == null)
+                {
+                    charge = new Dash(ark.transform.rotation * Vector3.up, Time.time);
+                }
+            }			
 		}
 	}
 
-	int GetControllerID(){
+    private void ThrowBall()
+    {
+        ball.GetComponent<GravityEnhancer>().Reset();
+        ball.GetComponent<GravityEnhancer>().AddForce(transform.forward + Vector3.up * 0.2f, 20, 0.15f);
+        ball.GetComponent<GravityEnhancer>().gravity = true;
+
+        ball.GetComponent<BallBehaviour>().Owner = null;
+        ball = null;
+    }
+
+    
+
+    int GetControllerID(){
 
 		int id = -1;
 
@@ -295,6 +330,11 @@ public class PlayerControllerAdv : MonoBehaviour {
 		}
 		return Input.GetAxis("P" + id + "RightStickY");
 	}
+
+    public void PickUpBall(GameObject b)
+    {
+        ball = b;
+    }
 
 
 }

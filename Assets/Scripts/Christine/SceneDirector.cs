@@ -11,6 +11,15 @@ public class SceneDirector : MonoBehaviour {
         get { return players; }
     }
 
+
+    private static Ball ball; 
+    public static Ball Ball
+    {
+        get { return ball; }
+        set { ball = value; }
+    }
+
+
     public static void AddPlayer(GameObject player)
     {
         players.Add(player);
