@@ -16,9 +16,10 @@ public class ShowMenuHolder : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.JoystickButton7))
 		{
-			Background.SetActive (!Pause.activeSelf);
-			Pause.SetActive (!Pause.activeSelf);
-			Debug.Log ("start");
+			if (Background.activeSelf == Pause.activeSelf) {
+				Background.SetActive (!Pause.activeSelf);
+				Pause.SetActive (!Pause.activeSelf);
+			}
 		}
 	}
 

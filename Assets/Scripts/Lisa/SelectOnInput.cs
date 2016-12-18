@@ -11,7 +11,6 @@ public class SelectOnInput : MonoBehaviour
 	public float RepeatDelay;
 	public int index;
 
-	private bool isActive;
 	private float LastUpdateTime;
 
 	void Start () {
@@ -20,7 +19,7 @@ public class SelectOnInput : MonoBehaviour
 
 	// Update is called once per frame
 	void Update () {
-		if (isActive) {
+		if (gameObject.activeSelf) {
 			if (CanRefresh ()) {
 				HandleVerticalAxisChanges ();
 			}
@@ -82,13 +81,5 @@ public class SelectOnInput : MonoBehaviour
 
 	private bool CanRefresh(){
 		return LastUpdateTime + RepeatDelay < Time.time ? true : false;
-	}
-
-	private void OnDisable(){
-		isActive = false;
-	}
-
-	private void OnEnable(){
-		isActive = true;
 	}
 }

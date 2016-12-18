@@ -38,7 +38,8 @@ public class MySceneManager : MonoBehaviour {
         //}
 
         //SceneManager.LoadScene(nextScene, LoadSceneMode.Single); // use single mode 
-        if (GetButtonA())
+        /*
+		if (GetButtonA())
         {
             switch (current.name)
             {
@@ -60,7 +61,7 @@ public class MySceneManager : MonoBehaviour {
             }
             SceneManager.LoadScene(nextScene, LoadSceneMode.Single);
         }
-        
+        */
 
 
 

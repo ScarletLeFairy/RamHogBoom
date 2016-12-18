@@ -4,6 +4,7 @@ using System.Collections;
 public class NavigateToMenu : MonoBehaviour
 {
     public GameObject MenuToHide, MenuToShow;
+	public GameObject Background;
 
     public void SwitchMenu()
     {
@@ -18,11 +19,13 @@ public class NavigateToMenu : MonoBehaviour
 		menu.SetActive (false);
 	}
 
-	public void HideBackground(GameObject background){
-		background.SetActive (false);
+	public void HideMenuFully(GameObject menu){
+		Background.SetActive (false);
+		menu.SetActive (false);
 	}
 
-	public void ShowBackground(GameObject background){
-		background.SetActive (true);
+	public void ShowMenuFully(GameObject menu){
+		Background.SetActive (true);
+		menu.SetActive (true);
 	}
 }
