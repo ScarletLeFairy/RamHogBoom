@@ -299,6 +299,7 @@ public class Player : MonoBehaviour
 
     public void GetDashed(GameObject dashingPlayer)
     {
+		ParticleSpawner.Instance.SpawnParticleSystem (gameObject.transform, 2);
 		SFXContainer.HitSFX.PlayNextSFXAtGameObject (gameObject);
         // loose ball in direction fo dash
         if (ball != null)
@@ -370,6 +371,7 @@ public class Player : MonoBehaviour
     public void Explode()
     {
 		SFXContainer.ExplosionSFX.PlayNextSFXAtGameObject (gameObject);
+		ParticleSpawner.Instance.SpawnParticleSystem (gameObject.transform, 0);
         CameraMovement shake = Camera.main.GetComponent<CameraMovement>();
         if (shake != null)
         {
@@ -382,6 +384,7 @@ public class Player : MonoBehaviour
 
     public void Foul()
     {
+		ParticleSpawner.Instance.SpawnParticleSystem (gameObject.transform, 1);
         // lightning strike on the player
         anim.SetTrigger("foul");
 		SFXContainer.ThunderSFX.PlayNextSFXAtGameObject (gameObject);
