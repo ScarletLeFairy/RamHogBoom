@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class LobbyManager : MonoBehaviour {
 
@@ -162,15 +163,45 @@ public class LobbyManager : MonoBehaviour {
 			}
 		}
 
+		int hog_count = 0;
+		int ram_count = 0;
+
 		foreach (Player player in Player.players) {
+			if (player.faction == Player.Faction.RAM) {
+				ram_count += 1;
+			}
+
+			if (player.faction == Player.Faction.HOG) {
+				hog_count += 1;
+			}
+
 			if(player.transform.position.x < 0 && player.faction != Player.Faction.RAM){
 				player.faction = Player.Faction.RAM;
+
 			}
 			if(player.transform.position.x > 0 && player.faction != Player.Faction.HOG){
 				player.faction = Player.Faction.HOG;
+
 			}
 		}
+
+		//Debug.Log (hog_count + " " + ram_count + " " + lobbytime);
+
+		if (hog_count == ram_count && (hog_count + ram_count) >= 2 && lobbytime == -1) {
+			lobbytime = Time.time;
+		}
+
+		if (hog_count != ram_count) {
+			lobbytime = -1;
+		}
+
+		if (lobbytime + 10 < Time.time && lobbytime != -1) {
+			SceneManager.LoadScene("Play");
+		}
+
+
 	}
 
-
+	float lobbytime = -1;
 }
+

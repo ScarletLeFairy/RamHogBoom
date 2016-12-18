@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace AssemblyCSharp
-{
 	public class SFXManager : MonoBehaviour
 	{
 		public AudioClip[] Sounds;
 		public int Index;
 
-		private static float volume;
+		public static float volume;
 
 		public void ChangeAudioVolume(Slider volumeSlider){
 			SFXManager.volume = volumeSlider.value;
@@ -54,6 +52,6 @@ namespace AssemblyCSharp
 				PlaySound (gameObject);
 			}
 		}
-	}
+
 }
 
