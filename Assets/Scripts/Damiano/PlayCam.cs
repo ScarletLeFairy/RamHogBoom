@@ -18,7 +18,10 @@ public class PlayCam : MonoBehaviour {
 		new CamAnchor(new Vector3(-97f, 20f, 5f))
 	};
 
-	GameObject[,,] spawns = new GameObject[5,2,4];
+	public SpawnZones[] RedSpawns;
+	public SpawnZones[] BlueSpawns;
+
+	public GameObject[,] spawns = new GameObject[5,4];
 
 	// Use this for initialization
 	void Awake (){
