@@ -295,7 +295,7 @@ public class Player : MonoBehaviour
 
     public void GetDashed(GameObject dashingPlayer)
     {
-		SFXContainer.HitSFX.PlayNextSFXAtGameObject (this);
+		SFXContainer.HitSFX.PlayNextSFXAtGameObject (gameObject);
         // loose ball in direction fo dash
         if (ball != null)
         {
@@ -365,7 +365,7 @@ public class Player : MonoBehaviour
 
     public void Explode()
     {
-		SFXContainer.ExplosionSFX.PlayNextSFXAtGameObject (this);
+		SFXContainer.ExplosionSFX.PlayNextSFXAtGameObject (gameObject);
         // die of explosion
         anim.SetTrigger("dead");
         Die();
@@ -375,7 +375,7 @@ public class Player : MonoBehaviour
     {
         // lightning strike on the player
         anim.SetTrigger("foul");
-		SFXContainer.ThunderSFX.PlayNextSFXAtGameObject (this);
+		SFXContainer.ThunderSFX.PlayNextSFXAtGameObject (gameObject);
         Die();
     }
 
@@ -386,7 +386,7 @@ public class Player : MonoBehaviour
             LooseBall();
         }
         anim.SetTrigger("fall");
-		SFXContainer.FallingSFX.PlayNextSFXAtGameObject (this);
+		SFXContainer.FallingSFX.PlayNextSFXAtGameObject (gameObject);
         Die();
     }
 
