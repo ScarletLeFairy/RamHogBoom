@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
 
-    //public static List<PlayerControllerAdv> players = new List<PlayerControllerAdv>();
-    public static List<GameObject> players = new List<GameObject>();
+    public static List<Player> players = new List<Player>();
+    //public static List<GameObject> players = new List<GameObject>();
 
     Rigidbody rigid;
     Collider border;
@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     Vector2 joyDirL = Vector2.zero;
     Vector2 joyDirR = Vector2.zero;
     float stun = 0;
+    public float stunValue = 0.2f;
 
     Dashing dash = null;
 
@@ -64,8 +65,29 @@ public class Player : MonoBehaviour
 
         ark = transform.Find("Ark").gameObject;
 
+        // check for Animator component
+        //if (GetComponent<Animator>() == null)
+        //{
+        //    gameObject.AddComponent<Animator>();
+        //}
         anim = GetComponentInChildren<Animator>();
+        //SetAnimatorParameters();        
     }
+
+    private void SetAnimatorParameters() // TODO
+    {
+        if (faction == Faction.HOG)
+        {
+            anim.runtimeAnimatorController = Resources.Load("Characters/HogAnimationController") as RuntimeAnimatorController;
+            anim.avatar = Resources.Load("Characters/animation_export/hogRig_idleAvatar") as Avatar;
+        } else
+        { // RAM
+            anim.runtimeAnimatorController = Resources.Load("Characters/RamAnimationController") as RuntimeAnimatorController;
+            anim.avatar = Resources.Load("Characters/ramRig_IDLETEST/ramRig_idleAvatar") as Avatar;
+        }
+        
+    }
+
 
     void AddForce(Vector3 dir, float force, float mass = 1)
     {
@@ -132,7 +154,7 @@ public class Player : MonoBehaviour
             else
             {
                 dash = null;
-                stun = 0.2f;
+                stun = stunValue;
             }
         }
 
@@ -186,11 +208,8 @@ public class Player : MonoBehaviour
         {
             if (ball != null)
             {
-                // TODO throw ball
                 ThrowBall();
-                Debug.Log("Hello World!");
-            }
-            else
+            } else
             {
                 if (dash == null)
                 {
@@ -227,52 +246,54 @@ public class Player : MonoBehaviour
         // loose ball in direction fo dash
         if (ball != null)
         {
-            ball.GetComponent<BallBehaviour>().GetThrown();
+            LooseBall();
 
-            GravityEnhancer grav = ball.GetComponent<GravityEnhancer>();
-            grav.Reset();
-            grav.AddForce(transform.forward + Vector3.up * 0.2f, 5, 0.15f);
-            grav.gravity = true;
-
-            ball = null;
-
-            //GameObject dashingPlayer = GetDashingPlayer();
-            if (dashingPlayer != null)
+            Player player = dashingPlayer.GetComponent<Player>();
+            if (player.faction == faction)
             {
-                Player player = dashingPlayer.GetComponent<Player>();
-                Debug.Log("Dashing Player found");
-                if (player.faction == faction)
-                {
-                    Explode();
-                    dashingPlayer.GetComponent<Player>().Explode();
-                }
-                else
-                {
-                    stun = 0.2f;
-                }
+                Explode();
+                dashingPlayer.GetComponent<Player>().Explode();
             }
+            else
+            {
+                stun = stunValue;
+            }
+
         }
+    }
+
+    private void LooseBall()
+    {
+        ball.GetComponent<BallBehaviour>().GetThrown();
+
+        GravityEnhancer grav = ball.GetComponent<GravityEnhancer>();
+        grav.Reset();
+        grav.AddForce(transform.forward + Vector3.up * 0.2f, 5, 0.15f);
+        grav.gravity = true;
+
+        ball = null;
     }
 
     private GameObject GetDashingPlayer()
     {
         GameObject closestPlayer = null;
-        foreach (GameObject player in players)
+        foreach (Player player in players)
         {
-            if (!player.GetComponent<Player>().isDead && player != gameObject)
+            if (!player.isDead && player.gameObject != gameObject)
             {
                 if (closestPlayer != null)
                 {
                     // TODO check if closer than current closest player
                     //if player.transform.position;
-                    if (Vector3.Distance(transform.position, player.transform.position) 
+                    if (Vector3.Distance(transform.position, player.transform.position)
                         < Vector3.Distance(transform.position, closestPlayer.transform.position))
                     {
-                        closestPlayer = player;
+                        closestPlayer = player.gameObject;
                     }
-                } else
+                }
+                else
                 {
-                    closestPlayer = player;
+                    closestPlayer = player.gameObject;
                 }
             }
         }
@@ -281,11 +302,12 @@ public class Player : MonoBehaviour
         if (closestPlayer != null && closestPlayer.GetComponent<Player>().dash != null)
         {
             return closestPlayer; // this is the dashing player
-        } else
+        }
+        else
         {
             // no dashing player
             return null;
-        }        
+        }
     }
 
     public void Explode()
@@ -304,6 +326,10 @@ public class Player : MonoBehaviour
 
     public void Fall()
     {
+        if (ball != null)
+        {
+            LooseBall();
+        }
         anim.SetTrigger("fall");
         Die();
     }
@@ -448,7 +474,7 @@ public class Player : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.GetComponent(typeof(Player))
-            && collision.gameObject.GetComponent<Player>().dash != null) 
+            && collision.gameObject.GetComponent<Player>().dash != null)
         {
             GetDashed(collision.gameObject);
         }
