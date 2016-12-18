@@ -83,10 +83,14 @@ public class Player : MonoBehaviour
 		hog.gameObject.SetActive(true);
 
 		GameObject hoghead = (GameObject)Instantiate (HOG_head [0]);
-		hoghead.transform.SetParent (HOG_head_slot.transform, false);
+        hoghead.transform.position = Vector3.zero;
+        hoghead.transform.rotation = Quaternion.identity;
+        hoghead.transform.SetParent (HOG_head_slot.transform, false);
 
 		GameObject ramhead = (GameObject)Instantiate (RAM_head [0]);
-		ramhead.transform.SetParent (RAM_head_slot.transform, false);
+        ramhead.transform.position = Vector3.zero;
+        ramhead.transform.rotation = Quaternion.identity;
+        ramhead.transform.SetParent (RAM_head_slot.transform, false);
 
         // check for Animator component
         //if (GetComponent<Animator>() == null)
