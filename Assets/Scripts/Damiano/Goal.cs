@@ -22,8 +22,9 @@ public class Goal : MonoBehaviour {
 
 		Debug.Log (other.gameObject.name);
 
-		if (player != null && player.faction != faction) {
-			Debug.Log (obj.name);
+		if (player != null && player.faction != faction && player.Ball != null) {
+			PlayCam.ScorePoint(player.faction);
+			//Debug.Log (obj.name);
 		}
 
 

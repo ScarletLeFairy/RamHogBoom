@@ -51,13 +51,17 @@ public class PlayCam : MonoBehaviour {
 
 	public static void ScorePoint(Player.Faction faction){
 
+		int index = 0;
 		if (faction == Player.Faction.HOG) {
 			master.points += 1;
+			index = 1;
 		}
 		if (faction == Player.Faction.RAM) {
 			master.points -= 1;
+			index = 0;
 		}
 
+		master.activeSpawn = master.DragonSpawns[master.points + 2].spawn [index];
 		master.refresh = true;
 	}
 	
@@ -78,9 +82,9 @@ public class PlayCam : MonoBehaviour {
 		MoveCamera ();
 	}
 
-	public static void ScorePoint(int i){
+	/*public static void ScorePoint(int i){
 		master.points += i;
-	}
+	}*/
 
 	void MoveCamera (){
 
