@@ -11,13 +11,16 @@ public class PlayCam : MonoBehaviour {
 	Camera cam;
 
 	CamAnchor[] anchor = new CamAnchor[]{
-		new CamAnchor(new Vector3(71f, 20f, 5f)),
-		new CamAnchor(new Vector3(31f, 20f, 5f)),
-		new CamAnchor(new Vector3(-12.5f, 20f, 5f)),
-		new CamAnchor(new Vector3(-56f, 20f, 5f)),
-		new CamAnchor(new Vector3(-97f, 20f, 5f))
+		new CamAnchor(new Vector3(83.5f, 20f, 5f)),
+		new CamAnchor(new Vector3(44.5f, 20f, 5f)),
+		new CamAnchor(new Vector3(0f, 20f, 5f)),
+		new CamAnchor(new Vector3(-43.5f, 20f, 5f)),
+		new CamAnchor(new Vector3(-84.5f, 20f, 5f))
 	};
 
+	public GameObject[] CameraSpawns;
+
+	public SpawnZones[] DragonSpawns;
 	public SpawnZones[] RedSpawns;
 	public SpawnZones[] BlueSpawns;
 
@@ -44,7 +47,7 @@ public class PlayCam : MonoBehaviour {
 	}
 
 	void NextRound (){
-		cam.transform.position = anchor[points + 2].position;
+		cam.transform.position = new Vector3(CameraSpawns[points + 2].transform.position.x, 20f, 5f) ;
 		/*foreach (Player player in Player.players) {
 			
 		}*/
