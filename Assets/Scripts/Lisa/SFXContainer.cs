@@ -10,7 +10,6 @@ public class SFXContainer : MonoBehaviour {
 	void Start () {
 		SFXManager[] managers = SFX.GetComponentsInChildren<SFXManager> ();
 		foreach(SFXManager manager in managers){
-			Debug.Log (manager.name);
 			if (manager.name == "Explosion SFX") {
 				ExplosionSFX = manager;
 			} else if (manager.name == "Hit SFX") {
