@@ -40,12 +40,7 @@ public class ParticleSpawner : MonoBehaviour {
         GameObject newParticleSystem = GameObject.Instantiate(particles[particleN]);
         newParticleSystem.transform.position = particlePosition.position;
 
-        //TODO: make dependent on Particle System name not number
-        if (particleN == 1)// || newParticleSystem.gameObject.name == "LighingParticles(Clone)")
-        {
-            //Debug.Log("Translate!");
-            newParticleSystem.transform.Translate(new Vector3(0, 7.5f, 0f), Space.World);
-        }
+       
 
         StartCoroutine(DestroyParticleSystem (newParticleSystem , (int)newParticleSystem.GetComponent<ParticleSystem>().duration));
 
