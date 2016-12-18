@@ -3,6 +3,8 @@ using System.Collections;
 
 public class PlayCam : MonoBehaviour {
 
+
+
 	// Use this for initialization
 	void Start (){
 		Camera cam = gameObject.GetComponent<Camera>();
@@ -14,4 +16,8 @@ public class PlayCam : MonoBehaviour {
 	void Update () {
 		
 	}
+}
+
+class CamAnchor{
+	public Vector3 position;
 }
