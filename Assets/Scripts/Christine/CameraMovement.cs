@@ -17,7 +17,6 @@ public class CameraMovement : MonoBehaviour {
     {
         // set middle plane as start target
         currentTarget = targetMiddle;            
-        
     }
     
 
