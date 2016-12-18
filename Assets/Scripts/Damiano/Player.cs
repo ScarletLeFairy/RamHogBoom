@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
-
     public static List<Player> players = new List<Player>();
     //public static List<GameObject> players = new List<GameObject>();
 
@@ -296,7 +295,7 @@ public class Player : MonoBehaviour
 
     public void GetDashed(GameObject dashingPlayer)
     {
-
+		SFXContainer.HitSFX.PlayNextSFXAtGameObject (this);
         // loose ball in direction fo dash
         if (ball != null)
         {
@@ -366,6 +365,7 @@ public class Player : MonoBehaviour
 
     public void Explode()
     {
+		SFXContainer.ExplosionSFX.PlayNextSFXAtGameObject (this);
         // die of explosion
         anim.SetTrigger("dead");
         Die();
@@ -375,6 +375,7 @@ public class Player : MonoBehaviour
     {
         // lightning strike on the player
         anim.SetTrigger("foul");
+		SFXContainer.ThunderSFX.PlayNextSFXAtGameObject (this);
         Die();
     }
 
@@ -385,6 +386,7 @@ public class Player : MonoBehaviour
             LooseBall();
         }
         anim.SetTrigger("fall");
+		SFXContainer.FallingSFX.PlayNextSFXAtGameObject (this);
         Die();
     }
 
