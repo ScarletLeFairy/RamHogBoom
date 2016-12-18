@@ -68,7 +68,7 @@ public class SelectOnInput : MonoBehaviour
 			}
 		}
 		// Button Back
-		if (Input.GetKeyDown(KeyCode.JoystickButton6))
+		if (Input.GetKeyDown(KeyCode.JoystickButton6) || Input.GetKeyDown(KeyCode.JoystickButton1))
 		{
 			backButtonObject.onClick.Invoke();
 		}
