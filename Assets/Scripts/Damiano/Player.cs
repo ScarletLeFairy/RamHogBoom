@@ -49,14 +49,15 @@ public class Player : MonoBehaviour
         Player_8
     }
 
-    public Faction faction;
+    public Faction faction = Faction.HOG;
     public enum Faction
     {
         HOG,
         RAM
     }
 
-    GameObject ark;
+    GameObject ark, ram, hog;
+	public int headID = 0;
 
     void Awake()
     {
@@ -64,6 +65,11 @@ public class Player : MonoBehaviour
         border = GetComponent<Collider>();
 
         ark = transform.Find("Ark").gameObject;
+		ram = transform.Find("Ram").gameObject;
+		hog = transform.Find("Hog").gameObject;
+
+		ram.gameObject.SetActive(false);
+		hog.gameObject.SetActive(true);
 
         // check for Animator component
         //if (GetComponent<Animator>() == null)
@@ -192,8 +198,17 @@ public class Player : MonoBehaviour
         RefreshArk();
     }
 
-    void Update()
-    {
+    void Update(){
+
+		if (faction == Faction.HOG && !hog.gameObject.activeSelf) {
+			hog.gameObject.SetActive(true);
+			ram.gameObject.SetActive(false);
+		}
+		if (faction == Faction.RAM && !ram.gameObject.activeSelf) {
+			ram.gameObject.SetActive(true);
+			hog.gameObject.SetActive(false);
+		}
+
         joyDirL = new Vector2(-GetLeftStickY(), -GetLeftStickX());
         joyDirR = new Vector2(-GetRightStickY(), -GetRightStickX());
 
