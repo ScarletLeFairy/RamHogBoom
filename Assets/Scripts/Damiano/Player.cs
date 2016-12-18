@@ -226,7 +226,22 @@ public class Player : MonoBehaviour
 			anim = ram.GetComponent<Animator>();
 		}
 
-        joyDirL = new Vector2(-GetLeftStickY(), -GetLeftStickX());
+        float leftStickX = GetLeftStickX();
+        float leftStickY = GetLeftStickY();
+
+        //Debug.Log(leftStickX + " " + leftStickY);
+
+        if (leftStickX != 0 || leftStickY != 0)
+        {
+            anim.SetBool("running", true);
+            Debug.Log("running is true");
+        } else
+        {
+            anim.SetBool("running", false);
+            Debug.Log("running is false");
+        }
+
+        joyDirL = new Vector2(-leftStickY, -leftStickX);
         joyDirR = new Vector2(-GetRightStickY(), -GetRightStickX());
 
         //Debug.DrawLine(transform.position, transform.position + ark.transform.rotation * Vector3.up*20, Color.green);

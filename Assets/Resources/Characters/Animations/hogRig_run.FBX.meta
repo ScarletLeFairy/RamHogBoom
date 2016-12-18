@@ -75,7 +75,81 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 20
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: hogBody
+        weight: 1
+      - path: naked_rig
+        weight: 1
+      - path: naked_rigHub001
+        weight: 1
+      - path: naked_rigHub001/naked_rigLLeg1
+        weight: 1
+      - path: naked_rigHub001/naked_rigLLeg1/naked_rigLLegAnkle
+        weight: 1
+      - path: naked_rigHub001/naked_rigRLeg1
+        weight: 1
+      - path: naked_rigHub001/naked_rigRLeg1/naked_rigRLegAnkle
+        weight: 1
+      - path: naked_rigHub001/naked_rigSpine1
+        weight: 1
+      - path: naked_rigHub001/naked_rigSpine1/naked_rigSpine2
+        weight: 1
+      - path: naked_rigHub001/naked_rigSpine1/naked_rigSpine2/naked_rigHub002
+        weight: 1
+      - path: naked_rigHub001/naked_rigSpine1/naked_rigSpine2/naked_rigHub002/naked_rigLArmCollarbone
+        weight: 1
+      - path: naked_rigHub001/naked_rigSpine1/naked_rigSpine2/naked_rigHub002/naked_rigLArmCollarbone/naked_rigLArm1
+        weight: 1
+      - path: naked_rigHub001/naked_rigSpine1/naked_rigSpine2/naked_rigHub002/naked_rigLArmCollarbone/naked_rigLArm1/naked_rigLArm2
+        weight: 1
+      - path: naked_rigHub001/naked_rigSpine1/naked_rigSpine2/naked_rigHub002/naked_rigLArmCollarbone/naked_rigLArm1/naked_rigLArm2/naked_rigLArmPalm
+        weight: 1
+      - path: naked_rigHub001/naked_rigSpine1/naked_rigSpine2/naked_rigHub002/naked_rigRArmCollarbone
+        weight: 1
+      - path: naked_rigHub001/naked_rigSpine1/naked_rigSpine2/naked_rigHub002/naked_rigRArmCollarbone/naked_rigRArm1
+        weight: 1
+      - path: naked_rigHub001/naked_rigSpine1/naked_rigSpine2/naked_rigHub002/naked_rigRArmCollarbone/naked_rigRArm1/naked_rigRArm2
+        weight: 1
+      - path: naked_rigHub001/naked_rigSpine1/naked_rigSpine2/naked_rigHub002/naked_rigRArmCollarbone/naked_rigRArm1/naked_rigRArm2/HandSlot
+        weight: 1
+      - path: naked_rigHub001/naked_rigSpine1/naked_rigSpine2/naked_rigHub002/naked_rigSpine
+        weight: 1
+      - path: naked_rigHub001/naked_rigSpine1/naked_rigSpine2/naked_rigHub002/naked_rigSpine/HeadSlot
+        weight: 1
+      - path: naked_rigLLegPlatform
+        weight: 1
+      - path: naked_rigRLegPlatform
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
     isReadable: 1
   meshes:
     lODScreenPercentages: []
