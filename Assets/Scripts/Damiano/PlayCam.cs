@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayCam : MonoBehaviour {
 
@@ -47,11 +48,34 @@ public class PlayCam : MonoBehaviour {
 
 		refresh = true;
 	}
+
+	public static void ScorePoint(Player.Faction faction){
+
+		if (faction == Player.Faction.HOG) {
+			master.points += 1;
+		}
+		if (faction == Player.Faction.RAM) {
+			master.points -= 1;
+		}
+
+		master.refresh = true;
+	}
 	
 	// Update is called once per frame
 	void Update () {
-		MoveCamera ();
+		
 
+		if (points >= 3 && points <= -3) {
+			if (points <= -3){
+				ShowWinner.ramsWin = true;
+			}
+			if (points >= 3){
+				ShowWinner.ramsWin = false;
+			}
+			SceneManager.LoadScene("Win");
+		}
+
+		MoveCamera ();
 	}
 
 	public static void ScorePoint(int i){
