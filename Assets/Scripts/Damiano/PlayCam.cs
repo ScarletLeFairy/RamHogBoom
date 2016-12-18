@@ -18,6 +18,8 @@ public class PlayCam : MonoBehaviour {
 	public SpawnZones[] RedSpawns;
 	public SpawnZones[] BlueSpawns;
 
+	bool refresh = true;
+
 	// Use this for initialization
 	void Awake (){
 		master = this;
@@ -30,18 +32,21 @@ public class PlayCam : MonoBehaviour {
 
 		points = start;
 		gametime = Time.time;
+
+		refresh = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		NextRound ();
+		MoveCamera ();
+
 	}
 
 	public static void ScorePoint(int i){
 		master.points += i;
 	}
 
-	void NextRound (){
+	void MoveCamera (){
 
 		Vector3 targetLocation = Vector3.zero;
 		Quaternion targetRotation = Quaternion.identity;
@@ -56,9 +61,44 @@ public class PlayCam : MonoBehaviour {
 
 		cam.transform.position = Vector3.Slerp (cam.transform.position, targetLocation, 2f * Time.deltaTime);
 		cam.transform.rotation = Quaternion.Slerp (cam.transform.rotation, targetRotation, 2f * Time.deltaTime);
+
+		if(Vector3.Distance(cam.transform.position, targetLocation) < 1 && refresh){
+			NextRound();
+			refresh = false;
+		}
 		/*foreach (Player player in Player.players) {
 			
 		}*/
+	}
+
+	void NextRound (){
+
+		int hog_count = 0;
+		int ram_count = 0;
+
+		foreach (Player obj in Player.players) {
+
+			Player player = obj;
+
+
+			if (player.faction == Player.Faction.HOG) {
+				Vector3 spawn = RedSpawns [points + 2].spawn [hog_count].transform.position;
+				//Debug.Log (player.name + " HOG " + spawn);
+				player.transform.position = spawn;
+				player.transform.rotation = Quaternion.LookRotation(Vector3.left, Vector3.up);
+
+				hog_count += 1;
+			}
+
+			if (player.faction == Player.Faction.RAM) {
+				Vector3 spawn = BlueSpawns [points + 2].spawn [ram_count].transform.position;
+				//Debug.Log (player.name + " RAM " + spawn);
+				player.transform.position = spawn;
+				player.transform.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up);
+
+				ram_count += 1;
+			}
+		}
 	}
 }
 
