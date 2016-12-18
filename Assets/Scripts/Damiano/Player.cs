@@ -56,6 +56,13 @@ public class Player : MonoBehaviour
         RAM
     }
 
+
+	public GameObject[] HOG_head;
+	public GameObject[] RAM_head;
+
+	public GameObject HOG_head_slot;
+	public GameObject RAM_head_slot;
+
     GameObject ark, ram, hog;
 	public int headID = 0;
 
@@ -71,12 +78,18 @@ public class Player : MonoBehaviour
 		ram.gameObject.SetActive(false);
 		hog.gameObject.SetActive(true);
 
+		GameObject hoghead = (GameObject)Instantiate (HOG_head [0]);
+		hoghead.transform.SetParent (HOG_head_slot.transform, false);
+
+		GameObject ramhead = (GameObject)Instantiate (RAM_head [0]);
+		ramhead.transform.SetParent (RAM_head_slot.transform, false);
+
         // check for Animator component
         //if (GetComponent<Animator>() == null)
         //{
         //    gameObject.AddComponent<Animator>();
         //}
-        anim = GetComponentInChildren<Animator>();
+        anim = hog.GetComponent<Animator>();
         //SetAnimatorParameters();        
     }
 
@@ -203,10 +216,14 @@ public class Player : MonoBehaviour
 		if (faction == Faction.HOG && !hog.gameObject.activeSelf) {
 			hog.gameObject.SetActive(true);
 			ram.gameObject.SetActive(false);
+
+			anim = hog.GetComponent<Animator>();
 		}
 		if (faction == Faction.RAM && !ram.gameObject.activeSelf) {
 			ram.gameObject.SetActive(true);
 			hog.gameObject.SetActive(false);
+
+			anim = ram.GetComponent<Animator>();
 		}
 
         joyDirL = new Vector2(-GetLeftStickY(), -GetLeftStickX());
