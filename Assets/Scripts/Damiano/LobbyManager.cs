@@ -25,6 +25,8 @@ public class LobbyManager : MonoBehaviour {
 
 			if (valid) {
 				GameObject player = Instantiate(PlayerPref);
+				player.name = "Player1";
+				DontDestroyOnLoad(player);
 				Player script = player.GetComponent<Player> ();
 				Player.players.Add (script);
 				script.slot = Player.Slot.Player_1;
@@ -64,6 +66,8 @@ public class LobbyManager : MonoBehaviour {
 			}
 			if (valid) {
 				GameObject player = Instantiate(PlayerPref);
+				player.name = "Player2";
+				DontDestroyOnLoad(player);
 				Player script = player.GetComponent<Player> ();
 				Player.players.Add (script);
 				script.slot = Player.Slot.Player_2;
@@ -77,6 +81,8 @@ public class LobbyManager : MonoBehaviour {
 			}
 			if (valid) {
 				GameObject player = Instantiate(PlayerPref);
+				player.name = "Player3";
+				DontDestroyOnLoad(player);
 				Player script = player.GetComponent<Player> ();
 				Player.players.Add (script);
 				script.slot = Player.Slot.Player_3;
@@ -90,6 +96,8 @@ public class LobbyManager : MonoBehaviour {
 			}
 			if (valid) {
 				GameObject player = Instantiate(PlayerPref);
+				player.name = "Player4";
+				DontDestroyOnLoad(player);
 				Player script = player.GetComponent<Player> ();
 				Player.players.Add (script);
 				script.slot = Player.Slot.Player_4;
@@ -105,6 +113,8 @@ public class LobbyManager : MonoBehaviour {
 			}
 			if (valid) {
 				GameObject player = Instantiate(PlayerPref);
+				player.name = "Player5";
+				DontDestroyOnLoad(player);
 				Player script = player.GetComponent<Player> ();
 				Player.players.Add (script);
 				script.slot = Player.Slot.Player_5;
@@ -118,6 +128,8 @@ public class LobbyManager : MonoBehaviour {
 			}
 			if (valid) {
 				GameObject player = Instantiate(PlayerPref);
+				player.name = "Player6";
+				DontDestroyOnLoad(player);
 				Player script = player.GetComponent<Player> ();
 				Player.players.Add (script);
 				script.slot = Player.Slot.Player_6;
@@ -131,6 +143,8 @@ public class LobbyManager : MonoBehaviour {
 			}
 			if (valid) {
 				GameObject player = Instantiate(PlayerPref);
+				player.name = "Player7";
+				DontDestroyOnLoad(player);
 				Player script = player.GetComponent<Player> ();
 				Player.players.Add (script);
 				script.slot = Player.Slot.Player_7;
@@ -143,23 +157,12 @@ public class LobbyManager : MonoBehaviour {
 				valid = player.slot == Player.Slot.Player_8 ? false : valid;
 			}
 			if (valid) {
-				
-				/*while (valid) {
-					Vector3 targetPosition = Vector3(spawn.x + Random.Range(-range,range), spawn.y, spawn.z + Random.Range(-range,range));
-
-					if ((Physics.OverlapSphere(targetPosition, 5, 0, 0, 0)) == null){
-						GameObject player = Instantiate(PlayerPref, targetPosition);
-
-						Player script = player.GetComponent<Player> ();
-						Player.players.Add (script);
-						script.slot = Player.Slot.Player_8;
-
-						valid = false;
-						//obstacles[x] = Instantiate(obstacleTypes[(Random.Range(0,2))], targetPosition, transform.rotation);
-					}
-				}*/
-
-
+				GameObject player = Instantiate(PlayerPref);
+				player.name = "Player8";
+				DontDestroyOnLoad(player);
+				Player script = player.GetComponent<Player> ();
+				Player.players.Add (script);
+				script.slot = Player.Slot.Player_8;
 			}
 		}
 
@@ -195,7 +198,7 @@ public class LobbyManager : MonoBehaviour {
 			lobbytime = -1;
 		}
 
-		if (lobbytime + 10 < Time.time && lobbytime != -1) {
+		if (lobbytime + 3 < Time.time && lobbytime != -1) {
 			SceneManager.LoadScene("Play");
 		}
 
