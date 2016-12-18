@@ -184,18 +184,40 @@ public class Player : MonoBehaviour {
 
     private void ThrowBall()
     {
-        //ball.GetComponent<Rigidbody>().AddForce(transform.forward + Vector3.up * 0.2f, 20, 0.15f);
-        ball.GetComponent<GravityEnhancer>().Reset();
-        ball.GetComponent<GravityEnhancer>().AddForce(transform.forward + Vector3.up * 0.2f, 7, 0.15f);
-        ball.GetComponent<GravityEnhancer>().gravity = true;
+        ball.GetComponent<BallBehaviour>().GetThrown();
 
-        ball.GetComponent<BallBehaviour>().Owner = null;
+        //ball.GetComponent<Rigidbody>().AddForce(transform.forward + Vector3.up * 0.2f, 20, 0.15f);
+        GravityEnhancer grav = ball.GetComponent<GravityEnhancer>();
+        grav.Reset();
+        Vector3 dir = transform.forward + Vector3.up * 0.2f;
+        ball.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+        grav.AddForce(dir, 7, 0.15f);
+        grav.gravity = true;
+                
         ball = null;
     }
 
     public void PickUpBall(GameObject b)
     {
         ball = b;
+    }
+
+    public void GetDashed()
+    {
+        stun = 0.2f;
+        // loose ball in direction fo dash
+        if (ball != null)
+        {
+            ball.GetComponent<BallBehaviour>().GetThrown();
+
+            GravityEnhancer grav = ball.GetComponent<GravityEnhancer>();
+            grav.Reset();
+            grav.AddForce(transform.forward + Vector3.up * 0.2f, 5, 0.15f);
+            grav.gravity = true;
+
+            
+            ball = null;
+        }        
     }
 
     int GetControllerID(){

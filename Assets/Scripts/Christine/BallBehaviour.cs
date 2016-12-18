@@ -10,12 +10,16 @@ public class BallBehaviour : MonoBehaviour {
         set { owner = value; }
     }
 
+    private Animator anim;
+    private AnimatorStateInfo currentBaseState;
+
+
     public float radius = 3;    // radius to check for the explosion
 
     // Use this for initialization
     void Start()
     {
-
+        anim = gameObject.GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -34,7 +38,8 @@ public class BallBehaviour : MonoBehaviour {
         {
             // already picked by another player
             CheckForOtherPlayers();
-        } else
+        }
+        else
         {
             // pick up ball
             GameObject oth = other.gameObject;
@@ -43,14 +48,17 @@ public class BallBehaviour : MonoBehaviour {
                 owner = other.gameObject;
                 owner.GetComponent<Player>().PickUpBall(gameObject);
                 Debug.Log("Picked up ball " + owner);
+                anim.SetBool("fly", false);
+
             }
 
         }
     }
 
-    void OnTriggerExit()
+    public void GetThrown()
     {
         owner = null;
+        anim.SetBool("fly", true);
     }
 
     private void CheckForOtherPlayers()
