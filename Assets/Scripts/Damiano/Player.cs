@@ -83,10 +83,14 @@ public class Player : MonoBehaviour
 		hog.gameObject.SetActive(true);
 
 		GameObject hoghead = (GameObject)Instantiate (HOG_head [0]);
-		hoghead.transform.SetParent (HOG_head_slot.transform, false);
+        hoghead.transform.position = Vector3.zero;
+        hoghead.transform.rotation = Quaternion.identity;
+        hoghead.transform.SetParent (HOG_head_slot.transform, false);
 
 		GameObject ramhead = (GameObject)Instantiate (RAM_head [0]);
-		ramhead.transform.SetParent (RAM_head_slot.transform, false);
+        ramhead.transform.position = Vector3.zero;
+        ramhead.transform.rotation = Quaternion.identity;
+        ramhead.transform.SetParent (RAM_head_slot.transform, false);
 
         // check for Animator component
         //if (GetComponent<Animator>() == null)
@@ -295,6 +299,7 @@ public class Player : MonoBehaviour
 
     public void GetDashed(GameObject dashingPlayer)
     {
+		ParticleSpawner.Instance.SpawnParticleSystem (gameObject.transform, 2);
 		SFXContainer.HitSFX.PlayNextSFXAtGameObject (gameObject);
         // loose ball in direction fo dash
         if (ball != null)
@@ -366,6 +371,7 @@ public class Player : MonoBehaviour
     public void Explode()
     {
 		SFXContainer.ExplosionSFX.PlayNextSFXAtGameObject (gameObject);
+		ParticleSpawner.Instance.SpawnParticleSystem (gameObject.transform, 0);
         CameraMovement shake = Camera.main.GetComponent<CameraMovement>();
         if (shake != null)
         {
@@ -378,6 +384,7 @@ public class Player : MonoBehaviour
 
     public void Foul()
     {
+		ParticleSpawner.Instance.SpawnParticleSystem (gameObject.transform, 1);
         // lightning strike on the player
         anim.SetTrigger("foul");
 		SFXContainer.ThunderSFX.PlayNextSFXAtGameObject (gameObject);
