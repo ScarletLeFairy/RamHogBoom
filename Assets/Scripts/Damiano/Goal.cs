@@ -15,12 +15,12 @@ public class Goal : MonoBehaviour {
 		
 	}
 
-	void OnColliderEnter(Collision c){
+	void OnTriggerEnter(Collider other){
 
-		GameObject obj = c.transform.root.gameObject;
+		GameObject obj = other.transform.root.gameObject;
 		Player player = obj.GetComponent<Player> ();
 
-		Debug.Log (c.gameObject.name);
+		Debug.Log (other.gameObject.name);
 
 		if (player != null && player.faction != faction) {
 			Debug.Log (obj.name);
