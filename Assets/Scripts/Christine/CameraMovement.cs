@@ -6,6 +6,21 @@ public class CameraMovement : MonoBehaviour {
     private float shakeAmount;
     private float shakeTimer;
 
+    private GameObject currentTarget;
+    public GameObject targetMiddle; // assign in editor
+    public GameObject targetMiddleLeft; // assign in editor
+    public GameObject targetMiddleRight; // assign in editor
+    public GameObject targetLeft; // assign in editor
+    public GameObject targetRight; // assign in editor
+
+    void Start ()
+    {
+        // set middle plane as start target
+        currentTarget = targetMiddle;            
+        
+    }
+    
+
     // Update is called once per frame
     void Update () {
 
@@ -36,4 +51,33 @@ public class CameraMovement : MonoBehaviour {
     {
         return Input.GetKeyDown(KeyCode.JoystickButton0);
     }
+
+
+
+    public void SwitchToMiddlePlane()
+    {
+
+    }
+
+    public void SwitchToMiddleRightPlane()
+    {
+
+    }
+
+    public void SwitchToRightPlane()
+    {
+
+    }
+
+    public void SwitchToMiddleLeftPlane()
+    {
+
+    }
+
+    public void SwitchToLeftPlane()
+    {
+
+    }
+
+
 }
