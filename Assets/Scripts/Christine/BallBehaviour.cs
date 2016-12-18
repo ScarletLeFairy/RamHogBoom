@@ -3,6 +3,13 @@ using System.Collections;
 
 public class BallBehaviour : MonoBehaviour {
 
+    private GameObject previousOwner;
+    public GameObject PreviousOwner
+    {
+        get { return previousOwner; }
+        set { previousOwner = value; }
+    }
+
     private GameObject owner;
     public GameObject Owner
     {
@@ -11,6 +18,7 @@ public class BallBehaviour : MonoBehaviour {
     }
 
     private Animator anim;
+    private Rigidbody rigbod;
 
 
     public float radius = 3;    // radius to check for the explosion
@@ -19,6 +27,7 @@ public class BallBehaviour : MonoBehaviour {
     void Start()
     {
         anim = GetComponentInChildren<Animator>();
+        rigbod = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -44,6 +53,8 @@ public class BallBehaviour : MonoBehaviour {
             GameObject oth = other.gameObject;
             if (oth.GetComponent<Player>() != null)
             {
+                rigbod.mass = 0;
+                previousOwner = null;
                 owner = other.gameObject;
                 owner.GetComponent<Player>().PickUpBall(gameObject);
                 Debug.Log("Picked up ball " + owner);
@@ -56,7 +67,9 @@ public class BallBehaviour : MonoBehaviour {
 
     public void GetThrown()
     {
-        owner = null;
+        rigbod.mass = 1;
+        previousOwner = owner;
+        owner = null;        
         anim.SetBool("fly", true);
     }
 

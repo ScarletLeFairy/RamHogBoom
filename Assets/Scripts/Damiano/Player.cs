@@ -234,11 +234,9 @@ public class Player : MonoBehaviour
         if (leftStickX != 0 || leftStickY != 0)
         {
             anim.SetBool("running", true);
-            Debug.Log("running is true");
         } else
         {
             anim.SetBool("running", false);
-            Debug.Log("running is false");
         }
 
         joyDirL = new Vector2(-leftStickY, -leftStickX);
@@ -269,6 +267,7 @@ public class Player : MonoBehaviour
 
     private void ThrowBall()
     {
+        
         ball.GetComponent<BallBehaviour>().GetThrown();
 
         //ball.GetComponent<Rigidbody>().AddForce(transform.forward + Vector3.up * 0.2f, 20, 0.15f);
@@ -276,7 +275,7 @@ public class Player : MonoBehaviour
         grav.Reset();
         Vector3 dir = transform.forward + Vector3.up * 0.2f;
         ball.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
-        grav.AddForce(dir, 7, 0.15f);
+        grav.AddForce(dir, 5, 0.10f);
         grav.gravity = true;
 
         ball = null;
@@ -284,7 +283,10 @@ public class Player : MonoBehaviour
 
     public void PickUpBall(GameObject b)
     {
+        
         ball = b;
+        GravityEnhancer grav = ball.GetComponent<GravityEnhancer>();
+        grav.gravity = false;
     }
 
     public void GetDashed(GameObject dashingPlayer)
