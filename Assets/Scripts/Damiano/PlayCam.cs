@@ -6,7 +6,9 @@ public class PlayCam : MonoBehaviour {
 	public static PlayCam master = null;
 
 	float gametime = 0;
-	public int points = 0;
+
+	public int start = 0;
+	int points = 0;
 
 	Camera cam;
 
@@ -24,8 +26,6 @@ public class PlayCam : MonoBehaviour {
 	public SpawnZones[] RedSpawns;
 	public SpawnZones[] BlueSpawns;
 
-	public GameObject[,] spawns = new GameObject[5,4];
-
 	// Use this for initialization
 	void Awake (){
 		master = this;
@@ -33,7 +33,7 @@ public class PlayCam : MonoBehaviour {
 		cam = gameObject.GetComponent<Camera>();
 		cam.depthTextureMode = DepthTextureMode.Depth;
 
-		points = 0;
+		points = start;
 		gametime = Time.time;
 	}
 	
