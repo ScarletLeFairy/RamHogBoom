@@ -17,4 +17,12 @@ public class NavigateToMenu : MonoBehaviour
 	public void HideMenu(GameObject menu){
 		menu.SetActive (false);
 	}
+
+	public void HideBackground(GameObject background){
+		background.SetActive (false);
+	}
+
+	public void ShowBackground(GameObject background){
+		background.SetActive (true);
+	}
 }
