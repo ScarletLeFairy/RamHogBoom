@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Ball : MonoBehaviour {
 
-	public Player owner = null;
+	public Player2 owner = null;
 
 	Renderer render;
 	Collider rigid;

@@ -10,9 +10,13 @@ public class PlayerControllerAdv : MonoBehaviour {
 	//public float maxspeed = 5;
 	public float turn = 6f;
 
+	float stun = 0;
+
 	Rigidbody rigid;
+	Collider border;
+
 	GameObject ark;
-	//Collider rigid;
+
 
 	public Slot slot;
 	public enum Slot{
@@ -34,12 +38,13 @@ public class PlayerControllerAdv : MonoBehaviour {
 
 	public static List<PlayerControllerAdv> players = new List<PlayerControllerAdv>();
 
-	Charge charge = null;
+	Dash charge = null;
 
 	// Use this for initialization
 	void Awake() {
-		//rigid = GetComponent<Rigidbody> (); 
 		rigid = GetComponent<Rigidbody>();
+		border = GetComponent<Collider> (); 
+
 		ark = transform.Find("Ark").gameObject;
 	}
 
@@ -48,43 +53,82 @@ public class PlayerControllerAdv : MonoBehaviour {
 	Vector2 joyDirR = Vector2.zero;
 
 	void FixedUpdate(){
+
+
 		Vector3 moveDir = Vector3.forward * joyDirL.x + Vector3.right * joyDirL.y;
 
 		//ROTATION
-		if (moveDir.magnitude != 0) {
+		if (moveDir.magnitude != 0 && stun <= 0) {
 			Quaternion targetRotation = Quaternion.LookRotation (moveDir, Vector3.up);
 			float factor = 1 - Quaternion.Angle( transform.rotation, targetRotation )/360f;
 			Quaternion deltaRotation = Quaternion.Slerp(transform.rotation, targetRotation, Mathf.Pow(turn, factor) * Time.deltaTime);
 
 			rigid.MoveRotation (deltaRotation);
-			//rigid.MoveRotation (deltaRotation);
 
-			rigid.AddForce (moveDir, ForceMode.VelocityChange);
-			if (rigid.velocity.magnitude > speed) {
+			rigid.AddForce (moveDir*10, ForceMode.Force);
+
+			//rigid.velocity += moveDir / Time.fixedDeltaTime;
+
+			//Debug.Log("MOVEDIR:" + moveDir.magnitude);
+
+			/*if (rigid.velocity.magnitude > speed) {
 				rigid.velocity = rigid.velocity.normalized * speed;
-			}
+			}*/
 		}
-
-
-
+			
 		if (charge != null) {
+			Debug.Log("CHARGEDIR:" + charge.direction.magnitude);
+
 			rigid.velocity = Vector3.zero;
+
 			if (charge.time + 0.3 > Time.time) {
-				rigid.AddForce (charge.direction * 12, ForceMode.VelocityChange);
-				//rigid.velocity = charge.direction * 14;
+				//rigid.AddForce (charge.direction * charge.power, ForceMode.VelocityChange);
+				rigid.velocity = charge.direction * Time.fixedDeltaTime;
 				rigid.MoveRotation (Quaternion.LookRotation(charge.direction, Vector3.up));
 			} else {
-				charge = null;
-
+				stun = 0.2f;
 			}
 		}
+
+
+
+		//BLOCK
+
+		float adjustment = 0;
+		if (border is CapsuleCollider) {
+			adjustment = ((CapsuleCollider)border).radius;
+		}
+
+		//Debug.Log (adjustment);
+
+		Debug.DrawLine(transform.position + Vector3.up, transform.position + Vector3.up + rigid.velocity, Color.green);
+
+		RaycastHit hit;
+		if (Physics.SphereCast(transform.position + Vector3.up, adjustment, rigid.velocity.normalized, out hit, rigid.velocity.magnitude, Physics.DefaultRaycastLayers , QueryTriggerInteraction.Ignore)){
+			Debug.Log ("Found an object - distance: " + hit.distance + " " + hit.collider.gameObject.name);	
+			//rigid.AddForce (-rigid.velocity, ForceMode.VelocityChange);
+			rigid.velocity = Vector3.zero;
+			//transform.position = transform.position + rigid.velocity;
+		}
+
+		if (stun > 0) {
+			stun -= Time.fixedDeltaTime;
+			rigid.velocity = Vector3.zero;
+			charge = null;
+		}
+		//rigid.MovePosition (transform.position + deltaPosition);
+		//rigid.AddForce(deltaPosition*100, ForceMode.Impulse);
+		//if (Physics.Raycast (transform.position, deltaPosition.normalized, out hit, deltaPosition.magnitude + adjustment)) {
+		//
+		//} 
+
 
 		// ark.transform.rotation * test;
 
 
 		//Vector3 deltaPosition = moveDir * speed * Time.deltaTime;
 
-		float adjustment = 0;
+		//float adjustment = 0;
 		/*if (rigid is CapsuleCollider) {
 			CapsuleCollider c = (CapsuleCollider)rigid;
 			adjustment = c.radius;
@@ -145,7 +189,7 @@ public class PlayerControllerAdv : MonoBehaviour {
 		if(GetRightBumper()){
 
 			if (charge == null) {
-				charge = new Charge(ark.transform.rotation * Vector3.up, Time.time);
+				charge = new Dash(ark.transform.rotation * Vector3.up, Time.time);
 			}
 			
 		}
@@ -256,12 +300,13 @@ public class PlayerControllerAdv : MonoBehaviour {
 }
 
 
-class Charge{
+class Dash{
 
 	public Vector3 direction;
 	public float time;
+	public float power = 1;
 
-	public Charge(Vector3 direction, float time){
+	public Dash(Vector3 direction, float time){
 		this.direction =  direction;
 		this.time = time;
 	}
