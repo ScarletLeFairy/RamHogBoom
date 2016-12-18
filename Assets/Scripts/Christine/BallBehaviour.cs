@@ -38,12 +38,12 @@ public class BallBehaviour : MonoBehaviour {
         {
             // pick up ball
             GameObject oth = other.gameObject;
-            if (oth.GetType == Player.GetType)
-            {
-                owner = other.gameObject;
-                owner.GetComponent<Player>().PickUpBall(gameObject);
-                Debug.Log("Picked up ball " + owner);
-            }
+            //if (oth.GetType == Player.GetType)
+            //{
+            //    owner = other.gameObject;
+            //    owner.GetComponent<Player>().PickUpBall(gameObject);
+            //    Debug.Log("Picked up ball " + owner);
+            //}
             
         }
     }
