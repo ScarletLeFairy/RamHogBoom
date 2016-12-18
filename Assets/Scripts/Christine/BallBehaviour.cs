@@ -21,9 +21,11 @@ public class BallBehaviour : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        CheckForOtherPlayers();
-
-
+        if (owner != null)
+        {
+            CheckForOtherPlayers();
+        }
+        
     }
 
     void OnTriggerEnter(Collider other)
@@ -31,34 +33,19 @@ public class BallBehaviour : MonoBehaviour {
         if (owner != null)
         {
             // already picked by another player
+            CheckForOtherPlayers();
         } else
         {
             // pick up ball
-            Debug.Log("Picked up ball");
-            owner = other.gameObject;            
-            owner.GetComponent<PlayerControllerAdv>().PickUpBall(gameObject);
+            GameObject oth = other.gameObject;
+            if (oth.GetType == Player.GetType)
+            {
+                owner = other.gameObject;
+                owner.GetComponent<Player>().PickUpBall(gameObject);
+                Debug.Log("Picked up ball " + owner);
+            }
+            
         }
-
-
-        //if (ball != null)
-        //{
-        //    // already picked up the ball 
-        //    Debug.Log("");
-        //}
-        //else
-        //{
-        //    Type type = other.transform.root.gameObject.GetType();
-        //    if (oth == SceneDirector.Ball)
-        //    {
-        //        ball = SceneDirector.Ball; // wenn trigger von Ball dann Ball aufheben   
-        //        ball.GetComponent<BallBehaviour>().Owner = gameObject;
-        //    }
-        //    else
-        //    {
-        //        // other object, maybe another player
-
-        //    }
-        //}
     }
 
     void OnTriggerExit()
@@ -70,7 +57,7 @@ public class BallBehaviour : MonoBehaviour {
     {
         // check if any players of same faction are near
         
-
+        // TODO
     }
 
 }
