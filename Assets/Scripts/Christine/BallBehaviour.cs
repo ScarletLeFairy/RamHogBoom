@@ -11,7 +11,6 @@ public class BallBehaviour : MonoBehaviour {
     }
 
     private Animator anim;
-    private AnimatorStateInfo currentBaseState;
 
 
     public float radius = 3;    // radius to check for the explosion
@@ -19,7 +18,7 @@ public class BallBehaviour : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        anim = gameObject.GetComponentInChildren<Animator>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
