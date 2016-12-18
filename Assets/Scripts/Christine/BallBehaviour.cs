@@ -11,7 +11,6 @@ public class BallBehaviour : MonoBehaviour {
     }
 
     private Animator anim;
-    private AnimatorStateInfo currentBaseState;
 
 
     public float radius = 3;    // radius to check for the explosion

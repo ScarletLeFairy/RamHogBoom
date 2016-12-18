@@ -9,7 +9,9 @@ public class Player : MonoBehaviour {
 	Rigidbody rigid;
 	Collider border;
 
-	public float boost = 400;
+    private Animator anim;
+
+    public float boost = 400;
 
 	public float speed = 6f;
 	public float maxspeed = 6f;
@@ -152,8 +154,8 @@ public class Player : MonoBehaviour {
 	}
 
 	void Update () {
-		joyDirL = new Vector2 (GetLeftStickY(), GetLeftStickX());
-		joyDirR = new Vector2 (GetRightStickY(), GetRightStickX());
+		joyDirL = new Vector2 (-GetLeftStickY(), -GetLeftStickX());
+		joyDirR = new Vector2 (-GetRightStickY(), -GetRightStickX());
 
         //Debug.DrawLine(transform.position, transform.position + ark.transform.rotation * Vector3.up*20, Color.green);
 
@@ -218,6 +220,32 @@ public class Player : MonoBehaviour {
             
             ball = null;
         }        
+    }
+
+    public void Explode()
+    {
+        // die of explosion
+        anim.SetTrigger("dead");
+        Die();
+    }
+
+    public void Foul()
+    {
+        // lightning strike on the player
+        anim.SetTrigger("foul");
+        Die();
+    }
+
+    public void Fall()
+    {
+        anim.SetTrigger("fall");
+        Die();
+    }
+
+    
+    public void Die()
+    {
+        isDead = true;
     }
 
     int GetControllerID(){
