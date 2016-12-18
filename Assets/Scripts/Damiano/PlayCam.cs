@@ -8,17 +8,9 @@ public class PlayCam : MonoBehaviour {
 	float gametime = 0;
 
 	public int start = 0;
-	int points = 0;
+	public int points = 0;
 
 	Camera cam;
-
-	CamAnchor[] anchor = new CamAnchor[]{
-		new CamAnchor(new Vector3(83.5f, 20f, 5f)),
-		new CamAnchor(new Vector3(44.5f, 20f, 5f)),
-		new CamAnchor(new Vector3(0f, 20f, 5f)),
-		new CamAnchor(new Vector3(-43.5f, 20f, 5f)),
-		new CamAnchor(new Vector3(-84.5f, 20f, 5f))
-	};
 
 	public GameObject[] CameraSpawns;
 
@@ -32,6 +24,9 @@ public class PlayCam : MonoBehaviour {
 
 		cam = gameObject.GetComponent<Camera>();
 		cam.depthTextureMode = DepthTextureMode.Depth;
+
+		cam.transform.position = new Vector3 (0, 100, 15);
+		cam.transform.rotation = Quaternion.Euler(80, 180, 0);
 
 		points = start;
 		gametime = Time.time;
@@ -47,7 +42,20 @@ public class PlayCam : MonoBehaviour {
 	}
 
 	void NextRound (){
-		cam.transform.position = new Vector3(CameraSpawns[points + 2].transform.position.x, 20f, 5f) ;
+
+		Vector3 targetLocation = Vector3.zero;
+		Quaternion targetRotation = Quaternion.identity;
+		if ((points) > -3 && (points) < 3) {
+			targetLocation = new Vector3 (CameraSpawns [points + 2].transform.position.x, 20f, 5f);
+			targetRotation = Quaternion.Euler(80, 180, 0);
+
+		} else {
+			targetLocation = new Vector3 (0, 7.6f, 2.1f);
+			targetRotation = Quaternion.Euler(50, 180, 0);
+		}
+
+		cam.transform.position = Vector3.Slerp (cam.transform.position, targetLocation, 2f * Time.deltaTime);
+		cam.transform.rotation = Quaternion.Slerp (cam.transform.rotation, targetRotation, 2f * Time.deltaTime);
 		/*foreach (Player player in Player.players) {
 			
 		}*/
