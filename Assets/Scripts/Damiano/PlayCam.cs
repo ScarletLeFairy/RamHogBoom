@@ -5,6 +5,7 @@ public class PlayCam : MonoBehaviour {
 
 	public static PlayCam master = null;
 
+
 	float gametime = 0;
 
 	public int start = 0;
@@ -17,6 +18,11 @@ public class PlayCam : MonoBehaviour {
 	public SpawnZones[] DragonSpawns;
 	public SpawnZones[] RedSpawns;
 	public SpawnZones[] BlueSpawns;
+
+
+	public GameObject activeSpawn;
+	public GameObject PrefBall;
+	GameObject ball = null;
 
 	bool refresh = true;
 
@@ -32,6 +38,12 @@ public class PlayCam : MonoBehaviour {
 
 		points = start;
 		gametime = Time.time;
+
+		foreach (Player obj in Player.players) {
+
+			Player player = obj;
+			//player.GetComponent<Renderer> ().enabled = false;
+		}
 
 		refresh = true;
 	}
@@ -73,13 +85,17 @@ public class PlayCam : MonoBehaviour {
 
 	void NextRound (){
 
+		refresh = false;
+
 		int hog_count = 0;
 		int ram_count = 0;
 
 		foreach (Player obj in Player.players) {
 
 			Player player = obj;
+			player.IsDead = false;
 
+			//player.GetComponent<Renderer> ().enabled = true;
 
 			if (player.faction == Player.Faction.HOG) {
 				Vector3 spawn = RedSpawns [points + 2].spawn [hog_count].transform.position;
@@ -99,6 +115,16 @@ public class PlayCam : MonoBehaviour {
 				ram_count += 1;
 			}
 		}
+
+		if (ball != null) {
+			Destroy(ball);
+		}
+
+		ball = (GameObject)Instantiate(PrefBall, activeSpawn.transform.position, Quaternion.LookRotation(Vector3.forward, Vector3.up));
+
+		//ball.transform.position = activeSpawn.transform.position;
+		//ball.transform.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.up);
+
 	}
 }
 
