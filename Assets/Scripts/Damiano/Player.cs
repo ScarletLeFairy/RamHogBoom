@@ -28,6 +28,11 @@ public class Player : MonoBehaviour
     Dashing dash = null;
 
     private GameObject ball;
+    public GameObject Ball
+    {
+        get { return ball; }
+        set { ball = value; }
+    }
 
     private bool isDead;
     public bool IsDead
