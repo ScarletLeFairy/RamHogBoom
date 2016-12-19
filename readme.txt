@@ -19,6 +19,8 @@ hand, won´t startle it at all)! Also, watch your step: the tournament is held on
 high up in the mountains, so don´t fall. And don´t even dare throwing the sacred Balldragon
 from the plateau: thunder god Goatdin himself will otherwise punish you with his thunderbolts!
 
+Lobby
+To start the game, both teams have to be even (after three seconds game starts!)
 
 -- Controls (XBox Controller)
 
