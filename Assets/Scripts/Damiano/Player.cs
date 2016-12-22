@@ -374,6 +374,7 @@ public class Player : MonoBehaviour
 		
         // die of explosion
         anim.SetTrigger("dead");
+        Debug.Log("Trigger dead is set for  " + slot + " of " + faction);
         Die();
     }
 

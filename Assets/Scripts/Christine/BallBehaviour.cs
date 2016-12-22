@@ -23,7 +23,7 @@ public class BallBehaviour : MonoBehaviour
     private Rigidbody rigbod;
 
 
-    public float radius = 3;    // radius to check for the explosion
+    public float radius = 5;    // radius to check for the explosion
 
     // Use this for initialization
     void Start()
