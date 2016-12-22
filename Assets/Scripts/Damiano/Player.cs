@@ -67,8 +67,8 @@ public class Player : MonoBehaviour
 	public GameObject HOG_head_slot;
 	public GameObject RAM_head_slot;
 
-    GameObject ark, ram, hog;
-	public int headID = 0;
+
+	GameObject ark, ram, hog, hoghead, ramhead;
 
     void Awake()
     {
@@ -82,15 +82,7 @@ public class Player : MonoBehaviour
 		ram.gameObject.SetActive(false);
 		hog.gameObject.SetActive(true);
 
-		GameObject hoghead = (GameObject)Instantiate (HOG_head [0]);
-        hoghead.transform.position = Vector3.zero;
-        hoghead.transform.rotation = Quaternion.identity;
-        hoghead.transform.SetParent (HOG_head_slot.transform, false);
-
-		GameObject ramhead = (GameObject)Instantiate (RAM_head [0]);
-        ramhead.transform.position = Vector3.zero;
-        ramhead.transform.rotation = Quaternion.identity;
-        ramhead.transform.SetParent (RAM_head_slot.transform, false);
+		RandomHead();
 
         // check for Animator component
         //if (GetComponent<Animator>() == null)
@@ -101,7 +93,31 @@ public class Player : MonoBehaviour
         //SetAnimatorParameters();        
     }
 
-    private void SetAnimatorParameters() // TODO
+	public void SetFaction(Faction faction){
+		this.faction = faction;
+		RandomHead ();
+	}
+
+	public void RandomHead(){
+		if (hoghead != null) {
+			Destroy (hoghead);
+		}
+		hoghead = (GameObject)Instantiate ( HOG_head[Random.Range(0, HOG_head.Length)]);
+		hoghead.transform.position = Vector3.zero;
+		hoghead.transform.rotation = Quaternion.identity;
+		hoghead.transform.SetParent (HOG_head_slot.transform, false);
+
+		if (ramhead != null) {
+			Destroy (ramhead);
+		}
+
+		ramhead = (GameObject)Instantiate ( RAM_head[Random.Range(0, RAM_head.Length)]);
+		ramhead.transform.position = Vector3.zero;
+		ramhead.transform.rotation = Quaternion.identity;
+		ramhead.transform.SetParent (RAM_head_slot.transform, false);
+	}
+
+    void SetAnimatorParameters() // TODO
     {
         if (faction == Faction.HOG)
         {

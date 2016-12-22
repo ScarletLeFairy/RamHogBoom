@@ -61,7 +61,7 @@ public class PlayCam : MonoBehaviour {
 			index = 0;
 		}
 
-		if (master.points >= 3 && master.points <= -3) {
+		if (master.points > 3 || master.points < -3) {
 			if (master.points <= -3) {
 				ShowWinner.ramsWin = true;
 			}
@@ -70,6 +70,7 @@ public class PlayCam : MonoBehaviour {
 			}
 			SceneManager.LoadScene ("Win");
 		} else {
+			Debug.Log(master.points);
 			master.activeSpawn = master.DragonSpawns[master.points + 2].spawn [index];
 			master.refresh = true;
 		}
@@ -77,10 +78,6 @@ public class PlayCam : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-
-
-
 		MoveCamera ();
 	}
 

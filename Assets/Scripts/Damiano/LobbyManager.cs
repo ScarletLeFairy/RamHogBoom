@@ -6,9 +6,11 @@ using UnityEngine.SceneManagement;
 public class LobbyManager : MonoBehaviour {
 
 	public GameObject PlayerPref;
+
 	public Vector3 spawn = Vector3.zero;
 	public float range = 10;
 
+	float lobbytime = -1;
 
 	void Awake(){
 		Player.players = new List<Player>();
@@ -170,24 +172,20 @@ public class LobbyManager : MonoBehaviour {
 		int ram_count = 0;
 
 		foreach (Player player in Player.players) {
+			if(player.transform.position.x < 0 && player.faction != Player.Faction.RAM){
+				player.SetFaction(Player.Faction.RAM);
+			}
+			if(player.transform.position.x > 0 && player.faction != Player.Faction.HOG){
+				player.SetFaction(Player.Faction.HOG);
+			}
+
 			if (player.faction == Player.Faction.RAM) {
 				ram_count += 1;
 			}
-
 			if (player.faction == Player.Faction.HOG) {
 				hog_count += 1;
 			}
-
-			if(player.transform.position.x < 0 && player.faction != Player.Faction.RAM){
-				player.faction = Player.Faction.RAM;
-
-			}
-			if(player.transform.position.x > 0 && player.faction != Player.Faction.HOG){
-				player.faction = Player.Faction.HOG;
-
-			}
 		}
-
 		//Debug.Log (hog_count + " " + ram_count + " " + lobbytime);
 
 		if (hog_count == ram_count && (hog_count + ram_count) >= 2 && lobbytime == -1) {
@@ -205,6 +203,5 @@ public class LobbyManager : MonoBehaviour {
 
 	}
 
-	float lobbytime = -1;
 }
 
