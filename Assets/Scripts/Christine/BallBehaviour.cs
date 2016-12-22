@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class BallBehaviour : MonoBehaviour
 {
@@ -88,14 +89,28 @@ public class BallBehaviour : MonoBehaviour
 
     private void CheckForOtherPlayers()
     {
-        // check if any players of same faction are near
-
-        // TODO
-
-        /*if (Vector3.Distance(transform.position, player.transform.position)
-                       < Vector3.Distance(transform.position, closestPlayer.transform.position))
+        if (owner != null)
         {
-        }*/
-
+            List<Player> players = Player.players;
+            List<Player> explodingPlayers = new List<Player>();
+            foreach (Player player in players)
+            {
+                if (!player.IsDead
+                    && Vector3.Distance(transform.position, player.transform.position) < radius
+                    && player.faction == owner.GetComponent<Player>().faction)
+                {
+                    explodingPlayers.Add(player);
+                }
+            }
+            if (explodingPlayers.Count > 1)
+            {
+                Explode();
+                foreach (Player player in explodingPlayers)
+                {
+                    player.Explode();
+                }
+            }            
+        }
     }
+
 }
