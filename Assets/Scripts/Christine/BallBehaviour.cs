@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BallBehaviour : MonoBehaviour {
+public class BallBehaviour : MonoBehaviour
+{
 
     private GameObject previousOwner;
     public GameObject PreviousOwner
@@ -37,7 +38,7 @@ public class BallBehaviour : MonoBehaviour {
         {
             CheckForOtherPlayers();
         }
-        
+
     }
 
     public void Explode()
@@ -81,7 +82,7 @@ public class BallBehaviour : MonoBehaviour {
     {
         rigbod.mass = 1;
         previousOwner = owner;
-        owner = null;        
+        owner = null;
         anim.SetBool("fly", true);
     }
 
@@ -91,9 +92,10 @@ public class BallBehaviour : MonoBehaviour {
 
         // TODO
 
-        if (Vector3.Distance(transform.position, player.transform.position)
+        /*if (Vector3.Distance(transform.position, player.transform.position)
                        < Vector3.Distance(transform.position, closestPlayer.transform.position))
         {
-        }
+        }*/
 
+    }
 }
