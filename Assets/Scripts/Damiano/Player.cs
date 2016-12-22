@@ -309,6 +309,7 @@ public class Player : MonoBehaviour
             Player player = dashingPlayer.GetComponent<Player>();
             if (player.faction == faction)
             {
+                ball.GetComponent<BallBehaviour>().Explode(); // TODO
                 Explode();
                 dashingPlayer.GetComponent<Player>().Explode();
             }
@@ -370,13 +371,7 @@ public class Player : MonoBehaviour
 
     public void Explode()
     {
-		SFXContainer.ExplosionSFX.PlayNextSFXAtGameObject (gameObject);
-		ParticleSpawner.Instance.SpawnParticleSystem (gameObject.transform, 0);
-        CameraMovement shake = Camera.main.GetComponent<CameraMovement>();
-        if (shake != null)
-        {
-            shake.ShakeCamera(0.1f, 1);
-        }
+		
         // die of explosion
         anim.SetTrigger("dead");
         Die();

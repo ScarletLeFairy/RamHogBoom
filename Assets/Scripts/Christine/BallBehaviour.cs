@@ -40,6 +40,18 @@ public class BallBehaviour : MonoBehaviour {
         
     }
 
+    public void Explode()
+    {
+        anim.SetTrigger("explode"); // TODO time explosion or change speed of the animation
+        SFXContainer.ExplosionSFX.PlayNextSFXAtGameObject(gameObject);
+        ParticleSpawner.Instance.SpawnParticleSystem(gameObject.transform, 0);
+        CameraMovement shake = Camera.main.GetComponent<CameraMovement>();
+        if (shake != null)
+        {
+            shake.ShakeCamera(0.1f, 1);
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (owner != null)
@@ -76,8 +88,12 @@ public class BallBehaviour : MonoBehaviour {
     private void CheckForOtherPlayers()
     {
         // check if any players of same faction are near
-        
+
         // TODO
-    }
+
+        if (Vector3.Distance(transform.position, player.transform.position)
+                       < Vector3.Distance(transform.position, closestPlayer.transform.position))
+        {
+        }
 
 }
